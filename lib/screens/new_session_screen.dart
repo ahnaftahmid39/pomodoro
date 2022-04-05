@@ -40,7 +40,7 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text('Home'),
+                      child: const Text('<  Home'),
                     ),
                     ChangeTimeCard(
                         cardTitle: 'Session Duration',
@@ -57,7 +57,7 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
                     // ignore: prefer_const_constructors
                     ChangeTimeCard(
                       cardTitle: 'Break Duration',
-                      defaultDuration: const Duration(minutes: 25),
+                      defaultDuration: const Duration(minutes: 5),
                       onChange: (Duration duration) {
                         final sessionSettings = Provider.of<SessionSettings>(
                             context,

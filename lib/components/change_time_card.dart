@@ -189,32 +189,50 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                decoration: const BoxDecoration(
-                  color: kClkBgClr,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 15,
                   ),
-                ),
-                width: 80,
-                height: 60,
-                child: Center(
-                  child: TextField(
-                    controller: _hcontrol,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: kClkBgClr,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.newRocker(
+                    width: 80,
+                    height: 60,
+                    child: Center(
+                      child: TextField(
+                        controller: _hcontrol,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.newRocker(
+                          color: kTextClr,
+                          fontSize: 32,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text(
+                    'Hours',
+                    style: TextStyle(
                       color: kTextClr,
-                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                ),
+                  )
+                ],
               ),
               const SizedBox(width: 10.0),
               Column(
@@ -233,32 +251,49 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
                 ],
               ),
               const SizedBox(width: 10.0),
-              Container(
-                decoration: const BoxDecoration(
-                  color: kClkBgClr,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
+              Column(
+                children: [
+                  const SizedBox(
+                    height: 15,
                   ),
-                ),
-                width: 80,
-                height: 60,
-                child: Center(
-                  child: TextField(
-                    controller: _mcontrol,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: kClkBgClr,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.newRocker(
+                    width: 80,
+                    height: 60,
+                    child: Center(
+                      child: TextField(
+                        controller: _mcontrol,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.newRocker(
+                          color: kTextClr,
+                          fontSize: 32,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text(
+                    'Minutes',
+                    style: TextStyle(
                       color: kTextClr,
-                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                ),
+                  )
+                ],
               ),
               const SizedBox(width: 10.0),
               Column(

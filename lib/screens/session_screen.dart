@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/screens/home_screen.dart';
 import 'package:pomodoro/util/session.dart';
@@ -23,29 +24,53 @@ class SessionScreen extends StatefulWidget {
 
 class _SessionScreenState extends State<SessionScreen> {
   Timer? _timer;
-  Duration dx = const Duration(seconds: 1);
+  Duration dx = const Duration(milliseconds: 10);
   Duration? sessionDuration;
   Duration? breakDuration;
 
-  bool _isSessionRunning = false;
-  bool _isSessionCompleted = false;
-
-  bool _isbreakRunning = false;
-  bool _isbreakCompleted = false;
+  SessionState _sessionState = SessionState.initial;
 
   void startSessionTimer() {
     setState(() {
-      _isSessionRunning = true;
+      _sessionState = SessionState.sessionRunning;
+      sessionDuration = Duration(seconds: sessionDuration!.inSeconds - 1);
     });
-
     _timer = Timer.periodic(dx, (timer) {
       setState(() {
         if (sessionDuration!.inSeconds > 0) {
           sessionDuration = Duration(seconds: sessionDuration!.inSeconds - 1);
         } else {
+          // session duration in seconds is now 0, so session completed
           setState(() {
-            _isSessionCompleted = true;
-            _isSessionRunning = false;
+            timer.cancel();
+            _sessionState = SessionState.breakRunning;
+            startBreakTimer();
+          });
+        }
+      });
+    });
+  }
+
+  void pauseSessionTimer() {
+    setState(() {
+      _sessionState = SessionState.sessionPaused;
+    });
+    _timer?.cancel();
+  }
+
+  void startBreakTimer() {
+    setState(() {
+      _sessionState = SessionState.breakRunning;
+      breakDuration = Duration(seconds: breakDuration!.inSeconds - 1);
+    });
+    _timer = Timer.periodic(dx, (timer) {
+      setState(() {
+        if (breakDuration!.inSeconds > 0) {
+          breakDuration = Duration(seconds: breakDuration!.inSeconds - 1);
+        } else {
+          // session duration in seconds is now 0, so session completed
+          setState(() {
+            _sessionState = SessionState.completed;
           });
           timer.cancel();
         }
@@ -53,9 +78,9 @@ class _SessionScreenState extends State<SessionScreen> {
     });
   }
 
-  void stopSessionTimer() {
+  void pauseBreakTimer() {
     setState(() {
-      _isSessionRunning = false;
+      _sessionState = SessionState.breakPaused;
     });
     _timer?.cancel();
   }
@@ -101,52 +126,57 @@ class _SessionScreenState extends State<SessionScreen> {
               ),
               Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Session Length: ${widget.session.sessionMinutes} minutes,',
-                  style: Theme.of(context).textTheme.displayMedium,
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.displayMedium?.color,
+                      fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
               ),
               Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Text(
-                  'Break Length: ${widget.session.breakMinutes} minutes,',
-                  style: Theme.of(context).textTheme.displayMedium,
+                  'Break Length: ${widget.session.breakMinutes} minutes',
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.displayMedium?.color,
+                      fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16.0),
+                alignment: Alignment.center,
                 child: Text(
-                    '${durationHoursPart(sessionDuration!)}:${durationMinutesPart(sessionDuration!)}:${durationSecondsPart(sessionDuration!)}'),
+                  getTitleBasedOnState(),
+                  style: const TextStyle(color: kTextClr, fontSize: 24),
+                ),
               ),
+              Container(
+                  padding: const EdgeInsets.all(16),
+                  child: _sessionState == SessionState.sessionRunning ||
+                          _sessionState == SessionState.sessionPaused ||
+                          _sessionState == SessionState.initial
+                      ? Text(
+                          '${durationHoursPart(sessionDuration!)}:${durationMinutesPart(sessionDuration!)}:${durationSecondsPart(sessionDuration!)}',
+                          style: GoogleFonts.newRocker(
+                            color: kTextClr,
+                            fontSize: 36,
+                          ),
+                        )
+                      : Text(
+                          '${durationHoursPart(breakDuration!)}:${durationMinutesPart(breakDuration!)}:${durationSecondsPart(breakDuration!)}',
+                          style: GoogleFonts.newRocker(
+                            color: kTextClr,
+                            fontSize: 36,
+                          ),
+                        )),
               Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(16.0),
-                child: TextButton(
-                    child: !_isSessionRunning || _isSessionCompleted
-                        ? const Text('Start')
-                        : const Text('Stop'),
-                    onPressed: () {
-                      if (kDebugMode) {
-                        print(
-                            'is running: $_isSessionRunning, is completed: $_isbreakCompleted');
-                      }
-                      if (!_isSessionRunning) {
-                        if (_isSessionCompleted) {
-                          // start break timer, but for now just restart the timer
-                          setState(() {
-                            _isSessionCompleted = false;
-                            sessionDuration = widget.session.sessionDuration;
-                          });
-                        }
-                        startSessionTimer();
-                      } else {
-                        stopSessionTimer();
-                      }
-                    }),
+                child: getTextButtonBasedOnState(context),
               ),
             ],
           ),
@@ -154,4 +184,93 @@ class _SessionScreenState extends State<SessionScreen> {
       ),
     );
   }
+
+  TextButton getTextButtonBasedOnState(BuildContext context) {
+    TextButton tb;
+    switch (_sessionState) {
+      case SessionState.initial:
+        tb = TextButton(
+          onPressed: startSessionTimer,
+          child: const Text('Start'),
+        );
+        break;
+      case SessionState.sessionRunning:
+        tb = TextButton(
+          child: const Text('Pause'),
+          onPressed: pauseSessionTimer,
+        );
+        break;
+      case SessionState.sessionPaused:
+        tb = TextButton(
+          child: const Text('Continue'),
+          onPressed: startSessionTimer,
+        );
+        break;
+      case SessionState.breakRunning:
+        tb = TextButton(
+          child: const Text('Pause'),
+          onPressed: pauseBreakTimer,
+        );
+        break;
+      case SessionState.breakPaused:
+        tb = TextButton(
+          child: const Text('Continue'),
+          onPressed: startBreakTimer,
+        );
+        break;
+      case SessionState.completed:
+        tb = TextButton(
+          child: const Text('Completed!'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        );
+        break;
+      default:
+        tb = TextButton(
+          onPressed: () {},
+          child: const Text('Nothing'),
+        );
+    }
+
+    return tb;
+  }
+
+  String getTitleBasedOnState() {
+    String title = '';
+
+    switch (_sessionState) {
+      case SessionState.initial:
+        title = 'A New Session Begins!';
+        break;
+      case SessionState.sessionRunning:
+        title = 'Session Running';
+        break;
+      case SessionState.sessionPaused:
+        title = 'Session Paused for now';
+        break;
+      case SessionState.breakRunning:
+        title = 'Running Break';
+        break;
+      case SessionState.breakPaused:
+        title = 'Break paused!';
+        break;
+      case SessionState.completed:
+        title = 'Yay completed!';
+        break;
+      default:
+        title = 'Bugged';
+    }
+    return title;
+  }
+}
+
+enum SessionState {
+  initial, // isSessionRunning = false && isSessionCompleted = false
+  sessionRunning, // isSessionRunning = true && isSessionCompleted = false,
+  sessionPaused, // isSessionRunning = false && isSessionCompleted = false,
+  breakRunning, // isSessionCompleted = true && isBreakRunning = true,
+  breakPaused, // isSessionCompleted = true && isBreakRunning = false && isBreakCompleted = false,
+  completed, // isSessionCompleted = true && isBreakCompleted = true
+  incomplete, // isSessionCompleted = false || isBreakCompleted = false
 }
