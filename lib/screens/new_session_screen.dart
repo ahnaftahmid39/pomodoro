@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:pomodoro/components/change_time_card.dart';
 import 'package:pomodoro/screens/session_screen.dart';
+import 'package:pomodoro/util/session.dart';
 import 'package:pomodoro/viewmodels/session_settings.dart';
 import 'package:provider/provider.dart';
 
@@ -20,60 +23,67 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            Container(color: const Color.fromRGBO(224, 95, 82, 0.6)),
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(color: const Color.fromRGBO(224, 95, 82, 0.6)),
+            ),
             Container(
               alignment: Alignment.center,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Home'),
-                  ),
-                  // ignore: prefer_const_constructors
-                  ChangeTimeCard(
-                      cardTitle: 'Session Duration',
+              child: ChangeNotifierProvider(
+                create: (_) => SessionSettings(),
+                builder: (context, _) => Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Home'),
+                    ),
+                    ChangeTimeCard(
+                        cardTitle: 'Session Duration',
+                        defaultDuration: const Duration(minutes: 25),
+                        onChange: (Duration duration) {
+                          final sessionSettings = Provider.of<SessionSettings>(
+                              context,
+                              listen: false);
+                          sessionSettings.sessionDuration = duration;
+                        }),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    // ignore: prefer_const_constructors
+                    ChangeTimeCard(
+                      cardTitle: 'Break Duration',
                       defaultDuration: const Duration(minutes: 25),
                       onChange: (Duration duration) {
                         final sessionSettings = Provider.of<SessionSettings>(
                             context,
                             listen: false);
-                        sessionSettings.sessionDuration = duration;
-                      }),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  // ignore: prefer_const_constructors
-                  ChangeTimeCard(
-                    cardTitle: 'Break Duration',
-                    defaultDuration: const Duration(minutes: 25),
-                    onChange: (Duration duration) {
-                      final sessionSettings =
-                          Provider.of<SessionSettings>(context, listen: false);
-                      sessionSettings.breakDuration = duration;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SessionScreen(
-                            session: Provider.of<SessionSettings>(context,
-                                    listen: false)
-                                .session,
+                        sessionSettings.breakDuration = duration;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    TextButton(
+                      onPressed: () {
+                        Session session =
+                            Provider.of<SessionSettings>(context, listen: false)
+                                .session;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SessionScreen(
+                              session: session,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: const Text('Start'),
-                  )
-                ],
+                        );
+                      },
+                      child: const Text('Start'),
+                    )
+                  ],
+                ),
               ),
             ),
           ],

@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,10 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
               'assets/images/tomato.png',
             ),
           ),
-          Container(
-            decoration:
-                const BoxDecoration(color: Color.fromRGBO(224, 95, 82, 0.6)),
-            width: 10000,
+           BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(color: const Color.fromRGBO(224, 95, 82, 0.6)),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
