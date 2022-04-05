@@ -3,19 +3,21 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pomodoro/components/change_time_button.dart';
 import 'package:pomodoro/constants/constant.dart';
+import 'package:pomodoro/util/util_functions.dart';
+
+typedef ChangeTimeCallback = void Function(Duration);
 
 class ChangeTimeCard extends StatefulWidget {
   const ChangeTimeCard({
     Key? key,
     this.cardTitle = 'Card Name',
-    this.initialHourDuration = '00',
-    this.initialMinuteDuration = '25',
+    this.defaultDuration = const Duration(hours: 0, minutes: 25),
+    required this.onChange,
   }) : super(key: key);
 
   final String cardTitle;
-  final String initialHourDuration;
-  final String initialMinuteDuration;
-
+  final ChangeTimeCallback onChange;
+  final Duration defaultDuration;
   @override
   State<ChangeTimeCard> createState() => _ChangeTimeCardState();
 }
@@ -26,64 +28,51 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
 
   void handleHourOnChange() {
     if (_hcontrol.text == '') return;
-    String nxt = '';
-    int curNumber = int.parse(_hcontrol.text);
 
-    if (curNumber < 10 && curNumber != 0 && _hcontrol.text.length == 1) {
-      nxt = '0' + _hcontrol.text;
-    }
-    if (curNumber == 0 && _hcontrol.text.length > 2) {
-      nxt = '00';
-    }
-    if (curNumber >= 10 && _hcontrol.text.length > 2) {
-      nxt = curNumber.toString();
-    }
+    int curNumber = int.parse(_hcontrol.text);
+    int nxtNumber = curNumber;
 
     if (curNumber > 23) {
-      nxt = '23';
+      nxtNumber = 23;
     }
     if (curNumber < 0) {
-      nxt = '00';
+      nxtNumber = 0;
     }
 
-    if (nxt != '') {
+    String nxt = intToStringWithPadding(nxtNumber);
+    if (curNumber != nxtNumber) {
       _hcontrol.value = _hcontrol.value.copyWith(
         text: nxt,
         selection: const TextSelection(baseOffset: 2, extentOffset: 2),
         composing: TextRange.empty,
       );
     }
+    widget.onChange(
+        Duration(minutes: nxtNumber * 60 + int.parse(_mcontrol.text)));
   }
 
   void handleMinuteOnChange() {
     if (_mcontrol.text == '') return;
-    String nxt = '';
     int curNumber = int.parse(_mcontrol.text);
-
-    if (curNumber < 10 && curNumber != 0 && _mcontrol.text.length == 1) {
-      nxt = '0' + _mcontrol.text;
-    }
-    if (curNumber == 0 && _mcontrol.text.length > 2) {
-      nxt = '00';
-    }
-    if (curNumber >= 10 && _mcontrol.text.length > 2) {
-      nxt = curNumber.toString();
-    }
+    int nxtNumber = curNumber;
 
     if (curNumber > 59) {
-      nxt = '59';
+      nxtNumber = 59;
     }
     if (curNumber < 0) {
-      nxt = '00';
+      nxtNumber = 0;
     }
 
-    if (nxt != '') {
+    if (curNumber != nxtNumber) {
+      String nxt = intToStringWithPadding(nxtNumber);
       _mcontrol.value = _mcontrol.value.copyWith(
         text: nxt,
         selection: const TextSelection(baseOffset: 2, extentOffset: 2),
         composing: TextRange.empty,
       );
     }
+    widget.onChange(
+        Duration(minutes: int.parse(_hcontrol.text) * 60 + nxtNumber));
   }
 
   void handleHourIncrement() {
@@ -161,10 +150,12 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
   @override
   void initState() {
     super.initState();
-    _hcontrol.value = _hcontrol.value.copyWith(text: widget.initialHourDuration);
+    _hcontrol.value = _hcontrol.value
+        .copyWith(text: durationHoursPart(widget.defaultDuration));
     _hcontrol.addListener(handleHourOnChange);
 
-    _mcontrol.value = _mcontrol.value.copyWith(text: widget.initialMinuteDuration);
+    _mcontrol.value = _mcontrol.value
+        .copyWith(text: durationMinutesPart(widget.defaultDuration));
     _mcontrol.addListener(handleMinuteOnChange);
   }
 

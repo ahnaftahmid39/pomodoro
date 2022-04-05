@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro/components/change_time_card.dart';
 import 'package:pomodoro/screens/session_screen.dart';
+import 'package:pomodoro/viewmodels/session_settings.dart';
+import 'package:provider/provider.dart';
 
 class NewSessionScreen extends StatefulWidget {
   static const routeName = '/new-session';
@@ -34,35 +36,43 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
                   ),
                   // ignore: prefer_const_constructors
                   ChangeTimeCard(
-                    cardTitle: 'Session Duration',
-                    initialMinuteDuration: '25',
-                  ),
+                      cardTitle: 'Session Duration',
+                      defaultDuration: const Duration(minutes: 25),
+                      onChange: (Duration duration) {
+                        final sessionSettings = Provider.of<SessionSettings>(
+                            context,
+                            listen: false);
+                        sessionSettings.sessionDuration = duration;
+                      }),
                   const SizedBox(
                     height: 20,
                   ),
                   // ignore: prefer_const_constructors
                   ChangeTimeCard(
                     cardTitle: 'Break Duration',
-                    initialMinuteDuration: '05',
+                    defaultDuration: const Duration(minutes: 25),
+                    onChange: (Duration duration) {
+                      final sessionSettings =
+                          Provider.of<SessionSettings>(context, listen: false);
+                      sessionSettings.breakDuration = duration;
+                    },
                   ),
                   const SizedBox(height: 20),
                   TextButton(
-                      onPressed: () {
-                        // connect with the view model
-                        // for now just go to new session page with these parameters,
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SessionScreen(
-                              session: Session(
-                                sessionMinutes: '10',
-                                breakMinutes: '02',
-                              ),
-                            ),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SessionScreen(
+                            session: Provider.of<SessionSettings>(context,
+                                    listen: false)
+                                .session,
                           ),
-                        );
-                      },
-                      child: const Text('Start'))
+                        ),
+                      );
+                    },
+                    child: const Text('Start'),
+                  )
                 ],
               ),
             ),
