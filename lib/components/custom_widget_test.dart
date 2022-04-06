@@ -11,14 +11,34 @@ class CustomWidget extends StatefulWidget {
 }
 
 class _CustomWidgetState extends State<CustomWidget> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    _controller.value = _controller.value.copyWith(
+      text: '1',
+      selection: const TextSelection(baseOffset: 1, extentOffset: 1),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: const Text('Home'),
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+
+          ],
+        ),
       ),
     );
   }

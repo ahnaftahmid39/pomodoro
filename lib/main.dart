@@ -55,8 +55,7 @@ class MyApp extends StatelessWidget {
             alignment: Alignment.center,
             textStyle:
                 MaterialStateProperty.all(const TextStyle(fontSize: 16.0)),
-            backgroundColor:
-                MaterialStateProperty.all(const Color(0xFFE47769)),
+            backgroundColor: MaterialStateProperty.all(const Color(0xFFE47769)),
             padding: MaterialStateProperty.all(
                 const EdgeInsets.fromLTRB(16, 16, 16, 16)),
             foregroundColor: MaterialStateProperty.all(Colors.white),
@@ -68,6 +67,21 @@ class MyApp extends StatelessWidget {
               ),
             ),
             elevation: MaterialStateProperty.resolveWith(getElevation),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(const Color(0xFFE47769)),
+            padding: MaterialStateProperty.all(
+                const EdgeInsets.fromLTRB(16, 16, 16, 16)),
+            foregroundColor: MaterialStateProperty.all(Colors.white),
+            shape: MaterialStateProperty.all(
+              const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100),
+                ),
+              ),
+            ),
           ),
         ),
       ),
