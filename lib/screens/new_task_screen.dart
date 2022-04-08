@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pomodoro/components/change_time_card.dart';
 import 'package:pomodoro/components/number_input_field.dart';
 import 'package:pomodoro/components/string_input_field.dart';
+import 'package:pomodoro/screens/task_session_screen.dart';
 import 'package:pomodoro/viewmodels/task_settings.dart';
 import 'package:provider/provider.dart';
 
@@ -117,7 +118,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                             int.parse(_sessionCountController.text);
                         taskSettings.lbsCount = int.parse(
                             _longBreakAfterSessionCountController.text);
-                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                TaskSessionScreen(task: taskSettings.task),
+                          ),
+                        );
                       },
                       child: const Text('Save!'),
                     ),

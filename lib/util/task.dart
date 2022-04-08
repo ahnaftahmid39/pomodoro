@@ -5,7 +5,7 @@ class Task {
     this.sessionDuration = const Duration(minutes: 25),
     this.breakDuration = const Duration(minutes: 5),
     this.longBreakDuration = const Duration(minutes: 15),
-    this.sessionCount = 1,
+    this.sessionCount = 4,
     this.lbsCount = 2,
     required this.taskName,
   });

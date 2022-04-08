@@ -217,7 +217,7 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
                           border: InputBorder.none,
                         ),
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.newRocker(
+                        style: GoogleFonts.zcoolQingKeHuangYou(
                           color: kTextClr,
                           fontSize: 32,
                         ),
@@ -278,7 +278,7 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
                           border: InputBorder.none,
                         ),
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.newRocker(
+                        style: GoogleFonts.zcoolQingKeHuangYou(
                           color: kTextClr,
                           fontSize: 32,
                         ),

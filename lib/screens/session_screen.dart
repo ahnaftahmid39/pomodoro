@@ -24,7 +24,7 @@ class SessionScreen extends StatefulWidget {
 
 class _SessionScreenState extends State<SessionScreen> {
   Timer? _timer;
-  Duration dx = const Duration(milliseconds: 10);
+  Duration dx = const Duration(milliseconds: 1000);
   Duration? sessionDuration;
   Duration? breakDuration;
 
@@ -166,14 +166,14 @@ class _SessionScreenState extends State<SessionScreen> {
                             _sessionState == SessionState.initial
                         ? Text(
                             '${durationHoursPart(sessionDuration!)}:${durationMinutesPart(sessionDuration!)}:${durationSecondsPart(sessionDuration!)}',
-                            style: GoogleFonts.newRocker(
+                            style: GoogleFonts.zcoolQingKeHuangYou(
                               color: kTextClr,
                               fontSize: 36,
                             ),
                           )
                         : Text(
                             '${durationHoursPart(breakDuration!)}:${durationMinutesPart(breakDuration!)}:${durationSecondsPart(breakDuration!)}',
-                            style: GoogleFonts.newRocker(
+                            style: GoogleFonts.zcoolQingKeHuangYou(
                               color: kTextClr,
                               fontSize: 36,
                             ),
