@@ -22,7 +22,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   void initState() {
     _taskNameController.text = 'Study';
-    _sessionCountController.text = '1';
+    _sessionCountController.text = '5';
     _longBreakAfterSessionCountController.text = '2';
     super.initState();
   }

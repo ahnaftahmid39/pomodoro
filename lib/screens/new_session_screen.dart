@@ -32,6 +32,7 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
               child: ChangeNotifierProvider(
                 create: (_) => SessionSettings(),
                 builder: (context, _) => SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
                       const SizedBox(

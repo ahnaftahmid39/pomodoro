@@ -40,7 +40,7 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
     }
 
     String nxt = intToStringWithPadding(nxtNumber);
-    if (curNumber != nxtNumber) {
+    if (_hcontrol.text != nxt) {
       _hcontrol.value = _hcontrol.value.copyWith(
         text: nxt,
         selection: const TextSelection(baseOffset: 2, extentOffset: 2),
@@ -64,8 +64,8 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
       nxtNumber = 0;
     }
 
-    if (curNumber != nxtNumber) {
-      String nxt = intToStringWithPadding(nxtNumber);
+    String nxt = intToStringWithPadding(nxtNumber);
+    if (_mcontrol.text != nxt) {
       _mcontrol.value = _mcontrol.value.copyWith(
         text: nxt,
         selection: const TextSelection(baseOffset: 2, extentOffset: 2),
