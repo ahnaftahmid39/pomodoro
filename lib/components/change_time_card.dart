@@ -47,8 +47,9 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
         composing: TextRange.empty,
       );
     }
-    widget.onChange(
-        Duration(minutes: nxtNumber * 60 + int.parse(_mcontrol.text)));
+    widget.onChange(Duration(
+        minutes: nxtNumber * 60 +
+            int.parse(_mcontrol.text == '' ? '0' : _mcontrol.text)));
   }
 
   void handleMinuteOnChange() {
@@ -71,8 +72,9 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
         composing: TextRange.empty,
       );
     }
-    widget.onChange(
-        Duration(minutes: int.parse(_hcontrol.text) * 60 + nxtNumber));
+    widget.onChange(Duration(
+        minutes: int.parse(_hcontrol.text == '' ? '0' : _hcontrol.text) * 60 +
+            nxtNumber));
   }
 
   void handleHourIncrement() {

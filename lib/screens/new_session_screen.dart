@@ -31,58 +31,62 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
               alignment: Alignment.center,
               child: ChangeNotifierProvider(
                 create: (_) => SessionSettings(),
-                builder: (context, _) => Column(
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('<  Home'),
-                    ),
-                    ChangeTimeCard(
-                        cardTitle: 'Session Duration',
-                        defaultDuration: const Duration(minutes: 25),
+                builder: (context, _) => SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('<  Home'),
+                      ),
+                      ChangeTimeCard(
+                          cardTitle: 'Session Duration',
+                          defaultDuration: const Duration(minutes: 25),
+                          onChange: (Duration duration) {
+                            final sessionSettings =
+                                Provider.of<SessionSettings>(context,
+                                    listen: false);
+                            sessionSettings.sessionDuration = duration;
+                          }),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      // ignore: prefer_const_constructors
+                      ChangeTimeCard(
+                        cardTitle: 'Break Duration',
+                        defaultDuration: const Duration(minutes: 5),
                         onChange: (Duration duration) {
                           final sessionSettings = Provider.of<SessionSettings>(
                               context,
                               listen: false);
-                          sessionSettings.sessionDuration = duration;
-                        }),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    // ignore: prefer_const_constructors
-                    ChangeTimeCard(
-                      cardTitle: 'Break Duration',
-                      defaultDuration: const Duration(minutes: 5),
-                      onChange: (Duration duration) {
-                        final sessionSettings = Provider.of<SessionSettings>(
+                          sessionSettings.breakDuration = duration;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Session session = Provider.of<SessionSettings>(
+                                  context,
+                                  listen: false)
+                              .session;
+                          Navigator.pushReplacement(
                             context,
-                            listen: false);
-                        sessionSettings.breakDuration = duration;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    TextButton(
-                      onPressed: () {
-                        Session session =
-                            Provider.of<SessionSettings>(context, listen: false)
-                                .session;
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SessionScreen(
-                              session: session,
+                            MaterialPageRoute(
+                              builder: (context) => SessionScreen(
+                                session: session,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      child: const Text('Start'),
-                    )
-                  ],
+                          );
+                        },
+                        child: const Text('Start'),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height / 3),
+                    ],
+                  ),
                 ),
               ),
             ),

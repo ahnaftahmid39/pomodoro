@@ -32,6 +32,7 @@ class NumberInputField extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16.0), color: kBgClr2),
                 child: TextField(
                   controller: controller,
+                  keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
                   ],

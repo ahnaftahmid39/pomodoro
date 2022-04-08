@@ -4,6 +4,7 @@ import 'package:pomodoro/util/task.dart';
 class TaskSettings extends ChangeNotifier {
   Task _task = Task(taskName: '');
 
+  // ignore: unnecessary_getters_setters
   Task get task => _task;
 
   String get taskName => _task.taskName;

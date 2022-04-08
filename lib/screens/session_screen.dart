@@ -101,125 +101,134 @@ class _SessionScreenState extends State<SessionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 50),
-            child: Image.asset('assets/images/tomato.png'),
-          ),
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(color: const Color.fromRGBO(224, 95, 82, 0.6)),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(16.0),
-                child: TextButton(
-                    child: const Text('Home'),
-                    onPressed: () {
-                      Navigator.popAndPushNamed(context, HomeScreen.routeName);
-                    }),
-              ),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Session Length: ${widget.session.sessionMinutes} minutes,',
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.displayMedium?.color,
-                      fontSize: 14),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: Text(
-                  'Break Length: ${widget.session.breakMinutes} minutes',
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.displayMedium?.color,
-                      fontSize: 14),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                alignment: Alignment.center,
-                child: Text(
-                  getTitleBasedOnState(),
-                  style: const TextStyle(color: kTextClr, fontSize: 24),
-                ),
-              ),
-              Container(
-                  padding: const EdgeInsets.all(16),
-                  child: _sessionState == SessionState.sessionRunning ||
-                          _sessionState == SessionState.sessionPaused ||
-                          _sessionState == SessionState.initial
-                      ? Text(
-                          '${durationHoursPart(sessionDuration!)}:${durationMinutesPart(sessionDuration!)}:${durationSecondsPart(sessionDuration!)}',
-                          style: GoogleFonts.newRocker(
-                            color: kTextClr,
-                            fontSize: 36,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              alignment: Alignment.bottomCenter,
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 50),
+              child: Image.asset('assets/images/tomato.png'),
+            ),
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(color: const Color.fromRGBO(224, 95, 82, 0.6)),
+            ),
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(16.0),
+                    child: ElevatedButton(
+                        child: const Text('Home'),
+                        onPressed: () {
+                          Navigator.popAndPushNamed(
+                              context, HomeScreen.routeName);
+                        }),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Session Length: ${widget.session.sessionMinutes} minutes,',
+                      style: TextStyle(
+                          color:
+                              Theme.of(context).textTheme.displayMedium?.color,
+                          fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: Text(
+                      'Break Length: ${widget.session.breakMinutes} minutes',
+                      style: TextStyle(
+                          color:
+                              Theme.of(context).textTheme.displayMedium?.color,
+                          fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    alignment: Alignment.center,
+                    child: Text(
+                      getTitleBasedOnState(),
+                      style: const TextStyle(color: kTextClr, fontSize: 24),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    child: _sessionState == SessionState.sessionRunning ||
+                            _sessionState == SessionState.sessionPaused ||
+                            _sessionState == SessionState.initial
+                        ? Text(
+                            '${durationHoursPart(sessionDuration!)}:${durationMinutesPart(sessionDuration!)}:${durationSecondsPart(sessionDuration!)}',
+                            style: GoogleFonts.newRocker(
+                              color: kTextClr,
+                              fontSize: 36,
+                            ),
+                          )
+                        : Text(
+                            '${durationHoursPart(breakDuration!)}:${durationMinutesPart(breakDuration!)}:${durationSecondsPart(breakDuration!)}',
+                            style: GoogleFonts.newRocker(
+                              color: kTextClr,
+                              fontSize: 36,
+                            ),
                           ),
-                        )
-                      : Text(
-                          '${durationHoursPart(breakDuration!)}:${durationMinutesPart(breakDuration!)}:${durationSecondsPart(breakDuration!)}',
-                          style: GoogleFonts.newRocker(
-                            color: kTextClr,
-                            fontSize: 36,
-                          ),
-                        )),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(16.0),
-                child: getTextButtonBasedOnState(context),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(16.0),
+                    child: getElevatedButtonBasedOnState(context),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height / 3),
+                ],
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  TextButton getTextButtonBasedOnState(BuildContext context) {
-    TextButton tb;
+  ElevatedButton getElevatedButtonBasedOnState(BuildContext context) {
+    ElevatedButton tb;
     switch (_sessionState) {
       case SessionState.initial:
-        tb = TextButton(
+        tb = ElevatedButton(
           onPressed: startSessionTimer,
           child: const Text('Start'),
         );
         break;
       case SessionState.sessionRunning:
-        tb = TextButton(
+        tb = ElevatedButton(
           child: const Text('Pause'),
           onPressed: pauseSessionTimer,
         );
         break;
       case SessionState.sessionPaused:
-        tb = TextButton(
+        tb = ElevatedButton(
           child: const Text('Continue'),
           onPressed: startSessionTimer,
         );
         break;
       case SessionState.breakRunning:
-        tb = TextButton(
+        tb = ElevatedButton(
           child: const Text('Pause'),
           onPressed: pauseBreakTimer,
         );
         break;
       case SessionState.breakPaused:
-        tb = TextButton(
+        tb = ElevatedButton(
           child: const Text('Continue'),
           onPressed: startBreakTimer,
         );
         break;
       case SessionState.completed:
-        tb = TextButton(
+        tb = ElevatedButton(
           child: const Text('Completed!'),
           onPressed: () {
             Navigator.pop(context);
@@ -227,7 +236,7 @@ class _SessionScreenState extends State<SessionScreen> {
         );
         break;
       default:
-        tb = TextButton(
+        tb = ElevatedButton(
           onPressed: () {},
           child: const Text('Nothing'),
         );
