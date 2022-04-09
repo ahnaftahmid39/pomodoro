@@ -93,80 +93,111 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
                       } else {
                         d = tsp.longBreakDuration;
                       }
-                      return Text(
-                        '${durationHoursPart(d)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
-                        style: GoogleFonts.zcoolQingKeHuangYou(
-                            color: kTextClr, fontSize: 24),
-                        textAlign: TextAlign.center,
+                      return Column(
+                        children: [
+                          Text(
+                            'Session completed: ${tsp.sessionCompletedCount}/${tsp.task.sessionCount}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: kTextClr,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            '${durationHoursPart(d)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
+                            style: GoogleFonts.zcoolQingKeHuangYou(
+                                color: kTextClr, fontSize: 36),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       );
                     }),
                     const SizedBox(
                       height: 16,
                     ),
                     Consumer<TaskSessionProvider>(builder: (_, tsp, __) {
-                      return Text(
-                        tsp.state.toString(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 16),
+                      return Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: kBgClr4,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Text(
+                          stateToDisplay[tsp.state]!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: kTextClr,
+                          ),
+                        ),
                       );
                     }),
                     const SizedBox(
                       height: 16,
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        final tsp = Provider.of<TaskSessionProvider>(context,
-                            listen: false);
-                        if (tsp.state == TaskSessionState.completed) {
-                          return;
-                        }
-                        if (tsp.timerType == TimerType.sessionTimer) {
-                          if (tsp.state == TaskSessionState.sessionCompleted) {
-                            if (tsp.sessionCompletedCount % tsp.task.lbsCount ==
-                                0) {
-                              tsp.runLongBreak(reset: true);
-                            } else {
-                              tsp.runBreak(reset: true);
-                            }
+                    Consumer<TaskSessionProvider>(
+                      builder: (_, tsp, __) {
+                        String btnTitle = '';
+                        bool canPause = false;
+                        if (tsp.state == TaskSessionState.initial ||
+                            tsp.state == TaskSessionState.breakCompleted ||
+                            tsp.state == TaskSessionState.longBreakCompleted) {
+                          btnTitle = 'Start Session';
+                          canPause = false;
+                        } else if (tsp.state ==
+                                TaskSessionState.sessionRunning ||
+                            tsp.state == TaskSessionState.breakRunning ||
+                            tsp.state == TaskSessionState.longBreakRunning) {
+                          canPause = true;
+                          btnTitle = 'Pause';
+                        } else if (tsp.state ==
+                                TaskSessionState.sessionPaused ||
+                            tsp.state == TaskSessionState.breakPaused ||
+                            tsp.state == TaskSessionState.longBreakPaused) {
+                          canPause = false;
+                          btnTitle = 'Continue';
+                        } else if (tsp.state ==
+                            TaskSessionState.sessionCompleted) {
+                          if (tsp.sessionCompletedCount % tsp.task.lbsCount ==
+                              0) {
+                            btnTitle = 'Start Long break';
                           } else {
-                            tsp.runSession();
+                            btnTitle = 'Start Break';
                           }
-                        } else if (tsp.timerType == TimerType.breakTimer) {
-                          if (tsp.state == TaskSessionState.breakCompleted) {
-                            tsp.runSession(reset: true);
-                          } else {
-                            tsp.runBreak();
-                          }
+                          canPause = false;
                         } else {
-                          if (tsp.state ==
-                              TaskSessionState.longBreakCompleted) {
-                            tsp.runSession(reset: true);
-                          } else {
-                            tsp.runLongBreak();
-                          }
+                          btnTitle = '';
                         }
+                        if (btnTitle == '') return const Center();
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                if (canPause) {
+                                  tsp.pause();
+                                } else {
+                                  tsp.handleOnStart();
+                                }
+                              },
+                              child: Text(btnTitle),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                              width: 16,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                tsp.stop();
+                              },
+                              child: const Text('Stop'),
+                            ),
+                          ],
+                        );
                       },
-                      child: const Text('Start'),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Provider.of<TaskSessionProvider>(context, listen: false)
-                            .pause();
-                      },
-                      child: const Text('Pause'),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Provider.of<TaskSessionProvider>(context, listen: false)
-                            .stop();
-                      },
-                      child: const Text('Stop'),
                     ),
                   ],
                 ),
@@ -177,4 +208,19 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
       ),
     );
   }
+
+  Map<TaskSessionState, String> stateToDisplay = {
+    TaskSessionState.initial: 'A new task begins!',
+    TaskSessionState.sessionRunning: 'Running Session',
+    TaskSessionState.sessionCompleted: 'Completed Session',
+    TaskSessionState.breakRunning: 'Running Break',
+    TaskSessionState.breakCompleted: 'Completed Break',
+    TaskSessionState.longBreakRunning: 'Taking a long break!',
+    TaskSessionState.longBreakCompleted: 'Long break completed',
+    TaskSessionState.sessionPaused: 'Session paused for now',
+    TaskSessionState.breakPaused: 'Break paused!',
+    TaskSessionState.longBreakPaused: 'Long break paused!',
+    TaskSessionState.completed: 'Completed yay!',
+    TaskSessionState.incomplete: 'Didn\'t finished :(',
+  };
 }

@@ -38,12 +38,7 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('<  Home'),
-                      ),
+
                       ChangeTimeCard(
                           cardTitle: 'Session Duration',
                           defaultDuration: const Duration(minutes: 25),
@@ -68,22 +63,36 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          Session session = Provider.of<SessionSettings>(
-                                  context,
-                                  listen: false)
-                              .session;
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SessionScreen(
-                                session: session,
-                              ),
-                            ),
-                          );
-                        },
-                        child: const Text('Start'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Session session = Provider.of<SessionSettings>(
+                                      context,
+                                      listen: false)
+                                  .session;
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SessionScreen(
+                                    session: session,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text('Start'),
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Go Home'),
+                          ),
+                        ],
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height / 3),
                     ],

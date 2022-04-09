@@ -10,6 +10,8 @@ class TaskSessionProvider extends ChangeNotifier {
     longBreakDuration = task.longBreakDuration;
   }
 
+
+
   final Task task;
   bool autoBreak;
   Timer? _timer;
@@ -23,6 +25,12 @@ class TaskSessionProvider extends ChangeNotifier {
   int sessionCompletedCount = 0;
 
   TaskSessionState state = TaskSessionState.initial;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   void runSession({bool reset = false}) {
     if (reset) sessionDuration = task.sessionDuration;
@@ -43,8 +51,6 @@ class TaskSessionProvider extends ChangeNotifier {
           state = TaskSessionState.completed;
         }
         notifyListeners();
-        print(
-            'Auto break: $autoBreak Session Complete: $sessionCompletedCount');
         if (autoBreak) {
           if (sessionCompletedCount % task.lbsCount == 0) {
             runLongBreak(reset: true);
@@ -120,6 +126,35 @@ class TaskSessionProvider extends ChangeNotifier {
     _timer?.cancel();
     state = TaskSessionState.incomplete;
     notifyListeners();
+  }
+
+  void handleOnStart() {
+    if (state == TaskSessionState.completed) {
+      return;
+    }
+    if (timerType == TimerType.sessionTimer) {
+      if (state == TaskSessionState.sessionCompleted) {
+        if (sessionCompletedCount % task.lbsCount == 0) {
+          runLongBreak(reset: true);
+        } else {
+          runBreak(reset: true);
+        }
+      } else {
+        runSession();
+      }
+    } else if (timerType == TimerType.breakTimer) {
+      if (state == TaskSessionState.breakCompleted) {
+        runSession(reset: true);
+      } else {
+        runBreak();
+      }
+    } else {
+      if (state == TaskSessionState.longBreakCompleted) {
+        runSession(reset: true);
+      } else {
+        runLongBreak();
+      }
+    }
   }
 }
 

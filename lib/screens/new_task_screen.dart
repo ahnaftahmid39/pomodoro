@@ -99,37 +99,60 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     defaultDuration: const Duration(minutes: 15),
                   ),
                   const SizedBox(height: 16.0),
-                  Center(
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        textStyle: MaterialStateProperty.all(
-                          const TextStyle(
-                            fontSize: 20,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          textStyle: MaterialStateProperty.all(
+                            const TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.all(18.0)),
                         ),
-                        padding: MaterialStateProperty.all(
-                            const EdgeInsets.all(24.0)),
+                        onPressed: () {
+                          final taskSettings =
+                              Provider.of<TaskSettings>(context, listen: false);
+                          taskSettings.taskName = _taskNameController.text;
+                          taskSettings.sessionCount =
+                              int.parse(_sessionCountController.text);
+                          taskSettings.lbsCount = int.parse(
+                              _longBreakAfterSessionCountController.text);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  TaskSessionScreen(task: taskSettings.task),
+                            ),
+                          );
+                        },
+                        child: const Text('Save!'),
                       ),
-                      onPressed: () {
-                        final taskSettings =
-                            Provider.of<TaskSettings>(context, listen: false);
-                        taskSettings.taskName = _taskNameController.text;
-                        taskSettings.sessionCount =
-                            int.parse(_sessionCountController.text);
-                        taskSettings.lbsCount = int.parse(
-                            _longBreakAfterSessionCountController.text);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                TaskSessionScreen(task: taskSettings.task),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Center(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            textStyle: MaterialStateProperty.all(
+                              const TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                            padding: MaterialStateProperty.all(
+                                const EdgeInsets.all(18.0)),
                           ),
-                        );
-                      },
-                      child: const Text('Save!'),
-                    ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Go Home'),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height / 2),
+                  SizedBox(height: MediaQuery.of(context).size.height / 3),
                 ],
               ),
             ),
