@@ -86,12 +86,16 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
                     ),
                     Consumer<TaskSessionProvider>(builder: (_, tsp, __) {
                       Duration d;
+                      Duration fixed;
                       if (tsp.timerType == TimerType.sessionTimer) {
                         d = tsp.sessionDuration;
+                        fixed = tsp.task.sessionDuration;
                       } else if (tsp.timerType == TimerType.breakTimer) {
                         d = tsp.breakDuration;
+                        fixed = tsp.task.breakDuration;
                       } else {
                         d = tsp.longBreakDuration;
+                        fixed = tsp.task.longBreakDuration;
                       }
                       return Column(
                         children: [
@@ -104,19 +108,39 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
                             ),
                           ),
                           const SizedBox(
-                            height: 16,
+                            height: 16.0,
                           ),
-                          Text(
-                            '${durationHoursPart(d)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
-                            style: GoogleFonts.zcoolQingKeHuangYou(
-                                color: kTextClr, fontSize: 36),
-                            textAlign: TextAlign.center,
+                          SizedBox(
+                            width: 200,
+                            height: 200,
+                            child: Stack(
+                              children: [
+                                SizedBox(
+                                  width: 200,
+                                  height: 200,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    backgroundColor: kBgClr2,
+                                    color: kBgClr4,
+                                    value: d.inSeconds / fixed.inSeconds,
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    '${durationHoursPart(d)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
+                                    style: GoogleFonts.zcoolQingKeHuangYou(
+                                        color: kTextClr, fontSize: 36),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       );
                     }),
                     const SizedBox(
-                      height: 16,
+                      height: 24,
                     ),
                     Consumer<TaskSessionProvider>(builder: (_, tsp, __) {
                       return Container(

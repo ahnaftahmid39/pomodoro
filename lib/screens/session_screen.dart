@@ -7,6 +7,7 @@ import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/screens/home_screen.dart';
 import 'package:pomodoro/util/session.dart';
 import 'package:pomodoro/util/util_functions.dart';
+import 'package:provider/single_child_widget.dart';
 
 class SessionScreen extends StatefulWidget {
   static const routeName = '/session';
@@ -24,7 +25,7 @@ class SessionScreen extends StatefulWidget {
 
 class _SessionScreenState extends State<SessionScreen> {
   Timer? _timer;
-  Duration dx = const Duration(milliseconds: 1000);
+  Duration dx = const Duration(milliseconds: 100);
   Duration? sessionDuration;
   Duration? breakDuration;
 
@@ -159,25 +160,49 @@ class _SessionScreenState extends State<SessionScreen> {
                       style: const TextStyle(color: kTextClr, fontSize: 24),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    child: _sessionState == SessionState.sessionRunning ||
-                            _sessionState == SessionState.sessionPaused ||
-                            _sessionState == SessionState.initial
-                        ? Text(
-                            '${durationHoursPart(sessionDuration!)}:${durationMinutesPart(sessionDuration!)}:${durationSecondsPart(sessionDuration!)}',
-                            style: GoogleFonts.zcoolQingKeHuangYou(
-                              color: kTextClr,
-                              fontSize: 36,
-                            ),
-                          )
-                        : Text(
-                            '${durationHoursPart(breakDuration!)}:${durationMinutesPart(breakDuration!)}:${durationSecondsPart(breakDuration!)}',
-                            style: GoogleFonts.zcoolQingKeHuangYou(
-                              color: kTextClr,
-                              fontSize: 36,
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: SingleChildBuilder(builder: (context, _) {
+                      Duration? d;
+                      Duration fixed;
+                      if (_sessionState == SessionState.sessionRunning ||
+                          _sessionState == SessionState.sessionPaused ||
+                          _sessionState == SessionState.initial) {
+                        d = sessionDuration;
+                        fixed = widget.session.sessionDuration;
+                      } else {
+                        d = breakDuration;
+                        fixed = widget.session.breakDuration;
+                      }
+                      return Stack(
+                        children: [
+                          SizedBox(
+                            width: 200,
+                            height: 200,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              backgroundColor: kBgClr2,
+                              color: kBgClr4,
+                              value:
+                                  d != null ? d.inSeconds / fixed.inSeconds : 0,
                             ),
                           ),
+                          Center(
+                            child: Text(
+                              '${durationHoursPart(d!)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
+                              style: GoogleFonts.zcoolQingKeHuangYou(
+                                color: kTextClr,
+                                fontSize: 36,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
                   ),
                   Container(
                     alignment: Alignment.center,
@@ -192,6 +217,16 @@ class _SessionScreenState extends State<SessionScreen> {
         ),
       ),
     );
+  }
+
+  Duration? getDuration() {
+    if (_sessionState == SessionState.sessionRunning ||
+        _sessionState == SessionState.sessionPaused ||
+        _sessionState == SessionState.initial) {
+      return sessionDuration;
+    } else {
+      return breakDuration;
+    }
   }
 
   ElevatedButton getElevatedButtonBasedOnState(BuildContext context) {
