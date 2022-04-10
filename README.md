@@ -2,9 +2,10 @@
 
 An App that makes use of pomodoro technique.
 
-![Home Page](https://media.discordapp.net/attachments/960638414754033716/960639199952904292/unknown.png)
-![Setting Session](https://media.discordapp.net/attachments/960638414754033716/960639497429712947/unknown.png)
-![Running Session](https://media.discordapp.net/attachments/960638414754033716/960639780281024552/unknown.png)
+![Home Page](https://cdn.discordapp.com/attachments/960638414754033716/962792306904272906/home.png)
+![Setting Session](https://cdn.discordapp.com/attachments/960638414754033716/962792307093020692/new_session.png)
+![Setting Task Session](https://cdn.discordapp.com/attachments/960638414754033716/962792306673594508/new_task.png)
+![Running Timer](https://cdn.discordapp.com/attachments/960638414754033716/962792307327918080/task_session.png)
 
 ## Getting Started
 
