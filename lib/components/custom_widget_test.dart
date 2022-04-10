@@ -35,7 +35,7 @@ class _CustomWidgetState extends State<CustomWidget> {
         alignment: Alignment.center,
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: [
+          children: const [
 
           ],
         ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/util/task.dart';
 
 class TaskSessionProvider extends ChangeNotifier {
@@ -10,12 +11,10 @@ class TaskSessionProvider extends ChangeNotifier {
     longBreakDuration = task.longBreakDuration;
   }
 
-
-
   final Task task;
   bool autoBreak;
   Timer? _timer;
-  Duration dx = const Duration(milliseconds: 10);
+  Duration dx = const Duration(milliseconds: kDebugMode ? 10 : 1000);
   late Duration sessionDuration;
   late Duration breakDuration;
   late Duration longBreakDuration;

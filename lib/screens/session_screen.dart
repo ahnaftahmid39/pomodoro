@@ -25,7 +25,7 @@ class SessionScreen extends StatefulWidget {
 
 class _SessionScreenState extends State<SessionScreen> {
   Timer? _timer;
-  Duration dx = const Duration(milliseconds: 100);
+  Duration dx = const Duration(milliseconds: kDebugMode ? 10 : 1000);
   Duration? sessionDuration;
   Duration? breakDuration;
 
@@ -114,73 +114,70 @@ class _SessionScreenState extends State<SessionScreen> {
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(color: const Color.fromRGBO(224, 95, 82, 0.6)),
             ),
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(16.0),
-                    child: ElevatedButton(
-                        child: const Text('Home'),
-                        onPressed: () {
-                          Navigator.popAndPushNamed(
-                              context, HomeScreen.routeName);
-                        }),
+            ListView(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                      child: const Text('Home'),
+                      onPressed: () {
+                        Navigator.popAndPushNamed(
+                            context, HomeScreen.routeName);
+                      }),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Session Length: ${widget.session.sessionMinutes} minutes,',
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.displayMedium?.color,
+                        fontSize: 14),
+                    textAlign: TextAlign.center,
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Session Length: ${widget.session.sessionMinutes} minutes,',
-                      style: TextStyle(
-                          color:
-                              Theme.of(context).textTheme.displayMedium?.color,
-                          fontSize: 14),
-                      textAlign: TextAlign.center,
-                    ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  child: Text(
+                    'Break Length: ${widget.session.breakMinutes} minutes',
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.displayMedium?.color,
+                        fontSize: 14),
+                    textAlign: TextAlign.center,
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                    child: Text(
-                      'Break Length: ${widget.session.breakMinutes} minutes',
-                      style: TextStyle(
-                          color:
-                              Theme.of(context).textTheme.displayMedium?.color,
-                          fontSize: 14),
-                      textAlign: TextAlign.center,
-                    ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  alignment: Alignment.center,
+                  child: Text(
+                    getTitleBasedOnState(),
+                    style: const TextStyle(color: kTextClr, fontSize: 24),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.center,
-                    child: Text(
-                      getTitleBasedOnState(),
-                      style: const TextStyle(color: kTextClr, fontSize: 24),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: SingleChildBuilder(builder: (context, _) {
-                      Duration? d;
-                      Duration fixed;
-                      if (_sessionState == SessionState.sessionRunning ||
-                          _sessionState == SessionState.sessionPaused ||
-                          _sessionState == SessionState.initial) {
-                        d = sessionDuration;
-                        fixed = widget.session.sessionDuration;
-                      } else {
-                        d = breakDuration;
-                        fixed = widget.session.breakDuration;
-                      }
-                      return Stack(
-                        children: [
-                          SizedBox(
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: SingleChildBuilder(builder: (context, _) {
+                    Duration? d;
+                    Duration fixed;
+                    if (_sessionState == SessionState.sessionRunning ||
+                        _sessionState == SessionState.sessionPaused ||
+                        _sessionState == SessionState.initial) {
+                      d = sessionDuration;
+                      fixed = widget.session.sessionDuration;
+                    } else {
+                      d = breakDuration;
+                      fixed = widget.session.breakDuration;
+                    }
+                    return Stack(
+                      children: [
+                        Center(
+                          child: SizedBox(
                             width: 200,
                             height: 200,
                             child: CircularProgressIndicator(
@@ -191,27 +188,27 @@ class _SessionScreenState extends State<SessionScreen> {
                                   d != null ? d.inSeconds / fixed.inSeconds : 0,
                             ),
                           ),
-                          Center(
-                            child: Text(
-                              '${durationHoursPart(d!)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
-                              style: GoogleFonts.zcoolQingKeHuangYou(
-                                color: kTextClr,
-                                fontSize: 36,
-                              ),
+                        ),
+                        Center(
+                          child: Text(
+                            '${durationHoursPart(d!)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
+                            style: GoogleFonts.zcoolQingKeHuangYou(
+                              color: kTextClr,
+                              fontSize: 36,
                             ),
                           ),
-                        ],
-                      );
-                    }),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(16.0),
-                    child: getElevatedButtonBasedOnState(context),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height / 3),
-                ],
-              ),
+                        ),
+                      ],
+                    );
+                  }),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(16.0),
+                  child: getElevatedButtonBasedOnState(context),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height / 3),
+              ],
             ),
           ],
         ),

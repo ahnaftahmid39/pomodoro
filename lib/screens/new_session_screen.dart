@@ -31,23 +31,22 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
               alignment: Alignment.center,
               child: ChangeNotifierProvider(
                 create: (_) => SessionSettings(),
-                builder: (context, _) => SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
+                builder: (context, _) {
+                  return ListView(
                     children: [
                       const SizedBox(
                         height: 20,
                       ),
-
                       ChangeTimeCard(
-                          cardTitle: 'Session Duration',
-                          defaultDuration: const Duration(minutes: 25),
-                          onChange: (Duration duration) {
-                            final sessionSettings =
-                                Provider.of<SessionSettings>(context,
-                                    listen: false);
-                            sessionSettings.sessionDuration = duration;
-                          }),
+                        cardTitle: 'Session Duration',
+                        defaultDuration: const Duration(minutes: 25),
+                        onChange: (Duration duration) {
+                          final sessionSettings = Provider.of<SessionSettings>(
+                              context,
+                              listen: false);
+                          sessionSettings.sessionDuration = duration;
+                        },
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -96,8 +95,8 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height / 3),
                     ],
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ],
