@@ -13,3 +13,12 @@ To run this app, type this in terminal:
 ```
 flutter run
 ```
+
+For apk release:
+```
+flutter build apk
+```
+## Assets reference
+- Tomato image: I created in figma from a tomato image :sunglasses:
+- Sounds: From here: [mixkit.co](https://mixkit.co/free-sound-effects/notification/)
+- Fonts: Timer font: [ZCOOL QingKe HuangYou](https://fonts.google.com/specimen/ZCOOL+QingKe+HuangYou?query=zcool&preview.text=12:40&preview.text_type=custom)

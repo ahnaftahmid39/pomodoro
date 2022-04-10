@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/screens/home_screen.dart';
 import 'package:pomodoro/util/session.dart';
+import 'package:pomodoro/util/sound.dart';
 import 'package:pomodoro/util/util_functions.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -29,6 +29,7 @@ class _SessionScreenState extends State<SessionScreen> {
   Duration? sessionDuration;
   Duration? breakDuration;
 
+  final Sound _sound = Sound();
   SessionState _sessionState = SessionState.initial;
 
   void startSessionTimer() {
@@ -43,10 +44,11 @@ class _SessionScreenState extends State<SessionScreen> {
         } else {
           // session duration in seconds is now 0, so session completed
           setState(() {
-            timer.cancel();
             _sessionState = SessionState.breakRunning;
             startBreakTimer();
           });
+          timer.cancel();
+          _sound.playPositive();
         }
       });
     });
@@ -57,6 +59,7 @@ class _SessionScreenState extends State<SessionScreen> {
       _sessionState = SessionState.sessionPaused;
     });
     _timer?.cancel();
+    _sound.playBeep();
   }
 
   void startBreakTimer() {
@@ -74,6 +77,7 @@ class _SessionScreenState extends State<SessionScreen> {
             _sessionState = SessionState.completed;
           });
           timer.cancel();
+          _sound.playPositive();
         }
       });
     });
@@ -84,6 +88,7 @@ class _SessionScreenState extends State<SessionScreen> {
       _sessionState = SessionState.breakPaused;
     });
     _timer?.cancel();
+    _sound.playBeep();
   }
 
   @override
@@ -96,6 +101,7 @@ class _SessionScreenState extends State<SessionScreen> {
   @override
   void dispose() {
     _timer?.cancel();
+    _sound.dispose();
     super.dispose();
   }
 
@@ -105,15 +111,7 @@ class _SessionScreenState extends State<SessionScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            Container(
-              alignment: Alignment.bottomCenter,
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 50),
-              child: Image.asset('assets/images/tomato.png'),
-            ),
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(color: const Color.fromRGBO(224, 95, 82, 0.6)),
-            ),
+            Container(color: kBgClr),
             ListView(
               children: [
                 Container(

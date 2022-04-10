@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pomodoro/constants/constant.dart';
@@ -27,15 +25,7 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
         child: Stack(
           children: [
             Container(
-              alignment: Alignment.bottomCenter,
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 50),
-              child: Image.asset('assets/images/tomato.png'),
-            ),
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                color: kBgClr,
-              ),
+              color: kBgClr,
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -227,7 +217,7 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                tsp.stop();
+                                tsp.stopIncomplete();
                               },
                               child: const Text('Stop'),
                             ),

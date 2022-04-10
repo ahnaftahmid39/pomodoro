@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
+            enableFeedback: false,
             backgroundColor: MaterialStateProperty.all(kBtnBgClr),
             textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 16)),
             overlayColor:

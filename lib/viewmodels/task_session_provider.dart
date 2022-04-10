@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pomodoro/constants/constant.dart';
+import 'package:pomodoro/util/sound.dart';
 import 'package:pomodoro/util/task.dart';
 
 class TaskSessionProvider extends ChangeNotifier {
@@ -18,6 +19,7 @@ class TaskSessionProvider extends ChangeNotifier {
   late Duration sessionDuration;
   late Duration breakDuration;
   late Duration longBreakDuration;
+  final Sound _sound = Sound();
 
   TimerType timerType = TimerType.sessionTimer;
 
@@ -50,6 +52,7 @@ class TaskSessionProvider extends ChangeNotifier {
           state = TaskSessionState.completed;
         }
         notifyListeners();
+        _sound.playPositive();
         if (autoBreak) {
           if (sessionCompletedCount % task.lbsCount == 0) {
             runLongBreak(reset: true);
@@ -76,6 +79,7 @@ class TaskSessionProvider extends ChangeNotifier {
         timer.cancel();
         state = TaskSessionState.breakCompleted;
         notifyListeners();
+        _sound.playPositive();
       }
     });
   }
@@ -95,6 +99,7 @@ class TaskSessionProvider extends ChangeNotifier {
         timer.cancel();
         state = TaskSessionState.longBreakCompleted;
         notifyListeners();
+        _sound.playPositive();
       }
     });
   }
@@ -109,6 +114,7 @@ class TaskSessionProvider extends ChangeNotifier {
     }
     _timer?.cancel();
     notifyListeners();
+    _sound.playBeep();
   }
 
   void unpause() {
@@ -119,12 +125,18 @@ class TaskSessionProvider extends ChangeNotifier {
     } else {
       runLongBreak();
     }
+    _sound.playBeep();
+  }
+
+  void stopIncomplete() {
+    _timer?.cancel();
+    state = TaskSessionState.incomplete;
+    notifyListeners();
+    _sound.playNegative();
   }
 
   void stop() {
     _timer?.cancel();
-    state = TaskSessionState.incomplete;
-    notifyListeners();
   }
 
   void handleOnStart() {
