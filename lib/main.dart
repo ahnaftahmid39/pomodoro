@@ -6,6 +6,7 @@ import 'package:pomodoro/screens/home_screen.dart';
 import 'package:pomodoro/screens/new_session_screen.dart';
 import 'package:pomodoro/screens/new_task_screen.dart';
 import 'package:pomodoro/screens/session_screen.dart';
+import 'package:pomodoro/screens/view_tasks_screen.dart';
 import 'package:pomodoro/util/material_color_maker.dart';
 import 'package:pomodoro/util/session.dart';
 
@@ -82,6 +83,7 @@ class MyApp extends StatelessWidget {
         SessionScreen.routeName: (context) => SessionScreen(
               session: Session(),
             ),
+        ViewTasksScreen.routeName: (((context) => const ViewTasksScreen())),
       },
     );
   }

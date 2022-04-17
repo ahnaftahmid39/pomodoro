@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:pomodoro/screens/view_tasks_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/';
@@ -57,7 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     alignment: Alignment.center,
                     child: ElevatedButton(
                       child: const Text('History'),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, ViewTasksScreen.routeName);
+                      },
                     ),
                   ),
                   Container(

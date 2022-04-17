@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pomodoro/constants/constant.dart';
+import 'package:pomodoro/models/task.dart';
 import 'package:pomodoro/util/sound.dart';
 import 'package:pomodoro/util/task.dart';
 
@@ -10,6 +11,7 @@ class TaskSessionProvider extends ChangeNotifier {
     sessionDuration = task.sessionDuration;
     breakDuration = task.breakDuration;
     longBreakDuration = task.longBreakDuration;
+    sessionCompletedCount = task.sessionCompletedCount;
   }
 
   final Task task;
@@ -20,10 +22,9 @@ class TaskSessionProvider extends ChangeNotifier {
   late Duration breakDuration;
   late Duration longBreakDuration;
   final Sound _sound = Sound();
+  late int sessionCompletedCount;
 
   TimerType timerType = TimerType.sessionTimer;
-
-  int sessionCompletedCount = 0;
 
   TaskSessionState state = TaskSessionState.initial;
 
@@ -48,8 +49,18 @@ class TaskSessionProvider extends ChangeNotifier {
         timer.cancel();
         state = TaskSessionState.sessionCompleted;
         sessionCompletedCount++;
+        task.sessionCompletedCount = sessionCompletedCount;
         if (sessionCompletedCount >= task.sessionCount) {
           state = TaskSessionState.completed;
+          TaskModel.updateTaskById(
+            task.taskID!,
+            TaskModel.fromTask(
+              task,
+              taskFinishingTime: DateTime.now(),
+            ),
+          );
+        } else {
+          TaskModel.updateTaskById(task.taskID!, TaskModel.fromTask(task));
         }
         notifyListeners();
         _sound.playPositive();

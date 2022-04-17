@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomodoro/models/task.dart';
 import 'package:pomodoro/util/task.dart';
 
 class TaskSettings extends ChangeNotifier {
@@ -43,8 +44,18 @@ class TaskSettings extends ChangeNotifier {
     // notifyListeners();
   }
 
+  set taskID(int id) {
+    _task.taskID = id;
+  }
+
   set task(Task t) {
     _task = t;
     // notifyListeners();
+  }
+
+  Future saveTask() async {
+    var taskmodel = TaskModel.fromTask(task, taskStartingTime: DateTime.now());
+    var id = await TaskModel.insertTask(taskmodel);
+    taskID = id;
   }
 }

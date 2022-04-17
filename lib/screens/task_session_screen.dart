@@ -20,6 +20,7 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
         child: Stack(

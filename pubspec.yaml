@@ -37,12 +37,13 @@ dependencies:
   provider: ^6.0.2
   just_audio: ^0.9.20
   just_audio_libwinmedia: ^0.0.4
+  sqflite: ^2.0.2
+  path: ^1.8.0
+  path_provider: ^2.0.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  sqflite:
-  path:
   intl: ^0.17.0
 
   # The "flutter_lints" package below contains a set of recommended lints to

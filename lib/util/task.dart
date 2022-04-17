@@ -2,15 +2,19 @@ import 'package:pomodoro/util/util_functions.dart';
 
 class Task {
   Task({
+    this.taskID,
     this.sessionDuration = const Duration(minutes: 25),
     this.breakDuration = const Duration(minutes: 5),
     this.longBreakDuration = const Duration(minutes: 15),
     this.sessionCount = 4,
     this.lbsCount = 2,
     required this.taskName,
+    this.sessionCompletedCount = 0,
   });
 
   int sessionCount;
+  int? taskID;
+  int sessionCompletedCount;
 
   /// After how many session do you want a long break.
   /// lbs -> Long Break Session Count

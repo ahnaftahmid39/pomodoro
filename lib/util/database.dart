@@ -1,45 +1,38 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
-import 'package:pomodoro/models/userProfile.dart';
 
 class DatabaseHelper {
-  DatabaseHelper._();
-  static final DatabaseHelper db = DatabaseHelper._();
-  static Database? _database;
-
-  Future<Database?> get database async {
-    if(_database != null) {
-      return _database;
+  static Database? _db;
+  static Future<Database?> get db async {
+    if (_db == null) {
+      WidgetsFlutterBinding.ensureInitialized();
+      // await deleteDatabase(join(await getDatabasesPath(), 'pomodoro.db'));
+      return await initDB();
+    } else {
+      return _db;
     }
-
-    _database = await initDB();
-    return _database;
   }
 
-  initDB() async {
-    return await openDatabase(
-      join(await getDatabasesPath(), 'pomodoro.db'),
-      onCreate: (db, version) async {
-        await db.execute('''
+  static Future<Database?> initDB() async {
+    return await openDatabase(join(await getDatabasesPath(), 'pomodoro.db'),
+        onCreate: (db, version) async {
+      await db.execute('''
           CREATE TABLE UserProfile (
-            userID INTEGER PRIMARY KEY, alarmTone TEXT, theme TEXT, notificationEnabled INTEGER
+            userID INTEGER PRIMARY KEY AUTOINCREMENT, alarmTone TEXT, theme TEXT, notificationEnabled INTEGER
           )
         ''');
-        await db.execute('''
+      await db.execute('''
           CREATE TABLE Task (
-            taskID INTEGER PRIMARY KEY, name TEXT, count INTEGER, isCompleted INTEGER, startTime INTEGER, finishTime INTEGER
-          )
+            taskID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, sessionCount INTEGER, lbsCount INTEGER, sessionCompletedCount INTEGER, startingTime INTEGER, finishingTime INTEGER, sessionDuration INTEGER, breakDuration INTEGER, longBreakDuration INTEGER
+          );
         ''');
-        await db.execute('''
+      await db.execute('''
           CREATE TABLE Session (
-            sessionID INTEGER PRIMARY KEY, taskID INTEGER, duration INTEGER, breakTime INTEGER
-            FOREIGN KEY (taskID)
-            REFERENCES Task(taskID)
+            sessionID INTEGER PRIMARY KEY AUTOINCREMENT, taskID INTEGER, sessionDuration INTEGER, breakDuration INTEGER,
+            FOREIGN KEY (taskID) REFERENCES Task(taskID)
           )
         ''');
-      },
-      version: 1
-    );
+    }, version: 1);
   }
 }

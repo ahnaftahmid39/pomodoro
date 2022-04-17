@@ -1,11 +1,11 @@
 
-class Session {
+class SessionModel {
   final int sessionID;
   final int taskID;
   final int duration;
   final int breakTime;
 
-  const Session({
+  const SessionModel({
    required this.sessionID,
    required this.taskID,
    required this.duration,

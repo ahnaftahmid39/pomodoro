@@ -112,7 +112,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                           padding: MaterialStateProperty.all(
                               const EdgeInsets.all(18.0)),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           final taskSettings =
                               Provider.of<TaskSettings>(context, listen: false);
                           taskSettings.taskName = _taskNameController.text;
@@ -120,6 +120,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                               int.parse(_sessionCountController.text);
                           taskSettings.lbsCount = int.parse(
                               _longBreakAfterSessionCountController.text);
+                          await taskSettings.saveTask();
                           Navigator.push(
                             context,
                             MaterialPageRoute(

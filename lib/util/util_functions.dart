@@ -8,3 +8,6 @@ String durationHoursPart(Duration d) =>
 
 String durationSecondsPart(Duration d) =>
     intToStringWithPadding(d.inSeconds.remainder(60));
+
+String onlyDateFromDateTime(DateTime dt) => '${dt.day}/${dt.month}/${dt.year}';
+String onlyTimeFromDateTime(DateTime dt) => '${dt.hour}:${dt.minute}';
