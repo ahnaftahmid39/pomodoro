@@ -4,16 +4,18 @@ import 'package:pomodoro/util/database.dart' show DatabaseHelper;
 import 'package:sqflite/sql.dart';
 
 class UserProfileModel {
-  final int userID;
-  final String theme;
-  final String alarmTone;
-  final bool notificationEnabled;
+  int? userID;
+  String theme;
+  String alarmTone;
+  bool notificationEnabled;
+  bool autoBreakEnabled;
 
-  const UserProfileModel({
-    required this.userID,
-    required this.theme,
-    required this.alarmTone,
-    required this.notificationEnabled,
+  UserProfileModel({
+    this.userID,
+    this.theme = 'light',
+    this.alarmTone = 'default',
+    this.notificationEnabled = true,
+    this.autoBreakEnabled = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,7 +24,26 @@ class UserProfileModel {
       'theme': theme,
       'alarmTone': alarmTone,
       'notificationEnabled': notificationEnabled ? 1 : 0,
+      'autoBreakEnabled': autoBreakEnabled ? 1 : 0,
     };
+  }
+
+  static UserProfileModel fromMap(Map<String, dynamic> profileMap) {
+    return UserProfileModel(
+      userID: profileMap['userID'],
+      alarmTone: profileMap['alarmTone'] ?? 'default',
+      theme: profileMap['theme'] ?? 'light',
+      notificationEnabled: profileMap['notificationEnabled'] != null
+          ? profileMap['notificationEnabled'] == 1
+              ? true
+              : false
+          : true,
+      autoBreakEnabled: profileMap['autoBreakEnabled'] != null
+          ? profileMap['autoBreakEnabled'] == 1
+              ? true
+              : false
+          : false,
+    );
   }
 
   @override
@@ -32,7 +53,8 @@ class UserProfileModel {
 userId: $userID,
 theme: $theme,
 alarmTone: $alarmTone,
-notificationEnabled: $notificationEnabled
+notificationEnabled: $notificationEnabled,
+autoBreakEnabled: $autoBreakEnabled
 ''';
   }
 
@@ -49,12 +71,7 @@ notificationEnabled: $notificationEnabled
     final db = await DatabaseHelper.db;
     final List<Map<String, dynamic>> maps = await db!.query('UserProfile');
     return List.generate(maps.length, (i) {
-      return UserProfileModel(
-        userID: maps[i]['userID'],
-        alarmTone: maps[i]['alarmTone'],
-        theme: maps[i]['theme'],
-        notificationEnabled: maps[i]['notificationEnabled'] == 1 ? true : false,
-      );
+      return fromMap(maps[i]);
     });
   }
 }

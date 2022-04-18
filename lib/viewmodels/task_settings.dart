@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomodoro/models/task.dart';
+import 'package:pomodoro/models/task_model.dart';
 import 'package:pomodoro/util/task.dart';
 
 class TaskSettings extends ChangeNotifier {

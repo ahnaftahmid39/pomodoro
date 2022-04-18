@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pomodoro/constants/constant.dart';
-import 'package:pomodoro/models/task.dart';
+import 'package:pomodoro/models/task_model.dart';
 import 'package:pomodoro/util/sound.dart';
 import 'package:pomodoro/util/task.dart';
 

@@ -68,7 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     alignment: Alignment.center,
                     child: ElevatedButton(
                       child: const Text('Settings'),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/settings');
+                      },
                     ),
                   ),
                   Container(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro/constants/constant.dart';
-import 'package:pomodoro/models/task.dart';
+import 'package:pomodoro/models/task_model.dart';
 import 'package:pomodoro/screens/task_session_screen.dart';
 import 'package:pomodoro/util/util_functions.dart';
 

@@ -19,7 +19,7 @@ class DatabaseHelper {
         onCreate: (db, version) async {
       await db.execute('''
           CREATE TABLE UserProfile (
-            userID INTEGER PRIMARY KEY AUTOINCREMENT, alarmTone TEXT, theme TEXT, notificationEnabled INTEGER
+            userID INTEGER PRIMARY KEY AUTOINCREMENT, alarmTone TEXT, theme TEXT, notificationEnabled INTEGER, autoBreakEnabled INTEGER
           )
         ''');
       await db.execute('''
