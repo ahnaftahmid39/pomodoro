@@ -172,7 +172,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('Go home'),
+                    child: const Text('Go Back'),
                   ),
                 ),
                 SwitchListTile(

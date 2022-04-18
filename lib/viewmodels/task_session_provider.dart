@@ -5,9 +5,11 @@ import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/models/task_model.dart';
 import 'package:pomodoro/util/sound.dart';
 import 'package:pomodoro/util/task.dart';
+import 'package:pomodoro/viewmodels/settings_provider.dart';
 
 class TaskSessionProvider extends ChangeNotifier {
-  TaskSessionProvider({required this.task, this.autoBreak = false}) {
+  TaskSessionProvider(
+      {required this.task, required this.settings, this.autoBreak = false}) {
     sessionDuration = task.sessionDuration;
     breakDuration = task.breakDuration;
     longBreakDuration = task.longBreakDuration;
@@ -15,6 +17,7 @@ class TaskSessionProvider extends ChangeNotifier {
   }
 
   final Task task;
+  SettingsProvider settings;
   bool autoBreak;
   Timer? _timer;
   Duration dx = const Duration(milliseconds: kDebugMode ? 10 : 1000);
@@ -63,7 +66,7 @@ class TaskSessionProvider extends ChangeNotifier {
           TaskModel.updateTaskById(task.taskID!, TaskModel.fromTask(task));
         }
         notifyListeners();
-        _sound.playPositive();
+        if (settings.notificationEnabled) _sound.playPositive();
         if (autoBreak) {
           if (sessionCompletedCount % task.lbsCount == 0) {
             runLongBreak(reset: true);
@@ -90,7 +93,7 @@ class TaskSessionProvider extends ChangeNotifier {
         timer.cancel();
         state = TaskSessionState.breakCompleted;
         notifyListeners();
-        _sound.playPositive();
+        if (settings.notificationEnabled) _sound.playPositive();
       }
     });
   }
@@ -110,7 +113,7 @@ class TaskSessionProvider extends ChangeNotifier {
         timer.cancel();
         state = TaskSessionState.longBreakCompleted;
         notifyListeners();
-        _sound.playPositive();
+        if (settings.notificationEnabled) _sound.playPositive();
       }
     });
   }
@@ -125,7 +128,7 @@ class TaskSessionProvider extends ChangeNotifier {
     }
     _timer?.cancel();
     notifyListeners();
-    _sound.playBeep();
+    if (settings.notificationEnabled) _sound.playBeep();
   }
 
   void unpause() {
@@ -136,14 +139,14 @@ class TaskSessionProvider extends ChangeNotifier {
     } else {
       runLongBreak();
     }
-    _sound.playBeep();
+    if (settings.notificationEnabled) _sound.playBeep();
   }
 
   void stopIncomplete() {
     _timer?.cancel();
     state = TaskSessionState.incomplete;
     notifyListeners();
-    _sound.playNegative();
+    if (settings.notificationEnabled) _sound.playNegative();
   }
 
   void stop() {

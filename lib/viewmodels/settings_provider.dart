@@ -34,6 +34,11 @@ class SettingsProvider extends ChangeNotifier {
     saveSettings();
   }
 
+  @override
+  String toString() {
+    return _userProfileModel.toString();
+  }
+
   // set userProfileModel(UserProfileModel u) {
   //   _userProfileModel = u;
   //    notifyListeners();

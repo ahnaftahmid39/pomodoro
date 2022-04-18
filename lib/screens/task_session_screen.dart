@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/util/task.dart';
 import 'package:pomodoro/util/util_functions.dart';
+import 'package:pomodoro/viewmodels/settings_provider.dart';
 import 'package:pomodoro/viewmodels/task_session_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,6 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -30,203 +30,207 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: ChangeNotifierProvider(
-                create: (context) => TaskSessionProvider(task: widget.task),
-                builder: (context, _) => ListView(
-                  children: [
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Provider.of<TaskSessionProvider>(context,
-                                  listen: false)
-                              .stop();
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Go back'),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      'Task: ${widget.task.taskName}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: kTextClr,
-                        fontSize: 24,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.0),
-                          color: kBtnBgClr.withOpacity(0.8)),
-                      child: SwitchListTile(
-                        activeTrackColor: HSLColor.fromColor(kBgClr2)
-                            .withLightness(0.55)
-                            .toColor(),
-                        title: const Text(
-                          'Automatically start break',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        value: _automaticBreak,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _automaticBreak = newValue;
+              child: Consumer<SettingsProvider>(
+                builder: (context, settings, _) => ChangeNotifierProvider(
+                  create: (context) => TaskSessionProvider(
+                      task: widget.task, settings: settings),
+                  builder: (context, _) => ListView(
+                    children: [
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
                             Provider.of<TaskSessionProvider>(context,
                                     listen: false)
-                                .autoBreak = newValue;
-                          });
-                        },
+                                .stop();
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Go back'),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Consumer<TaskSessionProvider>(builder: (_, tsp, __) {
-                      Duration d;
-                      Duration fixed;
-                      if (tsp.timerType == TimerType.sessionTimer) {
-                        d = tsp.sessionDuration;
-                        fixed = tsp.task.sessionDuration;
-                      } else if (tsp.timerType == TimerType.breakTimer) {
-                        d = tsp.breakDuration;
-                        fixed = tsp.task.breakDuration;
-                      } else {
-                        d = tsp.longBreakDuration;
-                        fixed = tsp.task.longBreakDuration;
-                      }
-                      return Column(
-                        children: [
-                          Text(
-                            'Session completed: ${tsp.sessionCompletedCount}/${tsp.task.sessionCount}',
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        'Task: ${widget.task.taskName}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: kTextClr,
+                          fontSize: 24,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: kBtnBgClr.withOpacity(0.8)),
+                        child: SwitchListTile(
+                          activeTrackColor: HSLColor.fromColor(kBgClr2)
+                              .withLightness(0.55)
+                              .toColor(),
+                          title: const Text(
+                            'Automatically start break',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          value: _automaticBreak,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _automaticBreak = newValue;
+                              Provider.of<TaskSessionProvider>(context,
+                                      listen: false)
+                                  .autoBreak = newValue;
+                            });
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Consumer<TaskSessionProvider>(builder: (_, tsp, __) {
+                        Duration d;
+                        Duration fixed;
+                        if (tsp.timerType == TimerType.sessionTimer) {
+                          d = tsp.sessionDuration;
+                          fixed = tsp.task.sessionDuration;
+                        } else if (tsp.timerType == TimerType.breakTimer) {
+                          d = tsp.breakDuration;
+                          fixed = tsp.task.breakDuration;
+                        } else {
+                          d = tsp.longBreakDuration;
+                          fixed = tsp.task.longBreakDuration;
+                        }
+                        return Column(
+                          children: [
+                            Text(
+                              'Session completed: ${tsp.sessionCompletedCount}/${tsp.task.sessionCount}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: kTextClr,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            SizedBox(
+                              width: 200,
+                              height: 200,
+                              child: Stack(
+                                children: [
+                                  SizedBox(
+                                    width: 200,
+                                    height: 200,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      backgroundColor: kBgClr2,
+                                      color: kBgClr4,
+                                      value: d.inSeconds / fixed.inSeconds,
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      '${durationHoursPart(d)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
+                                      style: GoogleFonts.zcoolQingKeHuangYou(
+                                          color: kTextClr, fontSize: 36),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      Consumer<TaskSessionProvider>(builder: (_, tsp, __) {
+                        return Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: kBgClr4,
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: Text(
+                            stateToDisplay[tsp.state]!,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 16,
                               color: kTextClr,
                             ),
                           ),
-                          const SizedBox(
-                            height: 16.0,
-                          ),
-                          SizedBox(
-                            width: 200,
-                            height: 200,
-                            child: Stack(
-                              children: [
-                                SizedBox(
-                                  width: 200,
-                                  height: 200,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    backgroundColor: kBgClr2,
-                                    color: kBgClr4,
-                                    value: d.inSeconds / fixed.inSeconds,
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    '${durationHoursPart(d)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
-                                    style: GoogleFonts.zcoolQingKeHuangYou(
-                                        color: kTextClr, fontSize: 36),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Consumer<TaskSessionProvider>(builder: (_, tsp, __) {
-                      return Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: kBgClr4,
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Text(
-                          stateToDisplay[tsp.state]!,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: kTextClr,
-                          ),
-                        ),
-                      );
-                    }),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Consumer<TaskSessionProvider>(
-                      builder: (_, tsp, __) {
-                        String btnTitle = '';
-                        bool canPause = false;
-                        if (tsp.state == TaskSessionState.initial ||
-                            tsp.state == TaskSessionState.breakCompleted ||
-                            tsp.state == TaskSessionState.longBreakCompleted) {
-                          btnTitle = 'Start Session';
-                          canPause = false;
-                        } else if (tsp.state ==
-                                TaskSessionState.sessionRunning ||
-                            tsp.state == TaskSessionState.breakRunning ||
-                            tsp.state == TaskSessionState.longBreakRunning) {
-                          canPause = true;
-                          btnTitle = 'Pause';
-                        } else if (tsp.state ==
-                                TaskSessionState.sessionPaused ||
-                            tsp.state == TaskSessionState.breakPaused ||
-                            tsp.state == TaskSessionState.longBreakPaused) {
-                          canPause = false;
-                          btnTitle = 'Continue';
-                        } else if (tsp.state ==
-                            TaskSessionState.sessionCompleted) {
-                          if (tsp.sessionCompletedCount % tsp.task.lbsCount ==
-                              0) {
-                            btnTitle = 'Start Long break';
-                          } else {
-                            btnTitle = 'Start Break';
-                          }
-                          canPause = false;
-                        } else {
-                          btnTitle = '';
-                        }
-                        if (btnTitle == '') return const Center();
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                if (canPause) {
-                                  tsp.pause();
-                                } else {
-                                  tsp.handleOnStart();
-                                }
-                              },
-                              child: Text(btnTitle),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                              width: 16,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                tsp.stopIncomplete();
-                              },
-                              child: const Text('Stop'),
-                            ),
-                          ],
                         );
-                      },
-                    ),
-                  ],
+                      }),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Consumer<TaskSessionProvider>(
+                        builder: (_, tsp, __) {
+                          String btnTitle = '';
+                          bool canPause = false;
+                          if (tsp.state == TaskSessionState.initial ||
+                              tsp.state == TaskSessionState.breakCompleted ||
+                              tsp.state ==
+                                  TaskSessionState.longBreakCompleted) {
+                            btnTitle = 'Start Session';
+                            canPause = false;
+                          } else if (tsp.state ==
+                                  TaskSessionState.sessionRunning ||
+                              tsp.state == TaskSessionState.breakRunning ||
+                              tsp.state == TaskSessionState.longBreakRunning) {
+                            canPause = true;
+                            btnTitle = 'Pause';
+                          } else if (tsp.state ==
+                                  TaskSessionState.sessionPaused ||
+                              tsp.state == TaskSessionState.breakPaused ||
+                              tsp.state == TaskSessionState.longBreakPaused) {
+                            canPause = false;
+                            btnTitle = 'Continue';
+                          } else if (tsp.state ==
+                              TaskSessionState.sessionCompleted) {
+                            if (tsp.sessionCompletedCount % tsp.task.lbsCount ==
+                                0) {
+                              btnTitle = 'Start Long break';
+                            } else {
+                              btnTitle = 'Start Break';
+                            }
+                            canPause = false;
+                          } else {
+                            btnTitle = '';
+                          }
+                          if (btnTitle == '') return const Center();
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (canPause) {
+                                    tsp.pause();
+                                  } else {
+                                    tsp.handleOnStart();
+                                  }
+                                },
+                                child: Text(btnTitle),
+                              ),
+                              const SizedBox(
+                                height: 16,
+                                width: 16,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  tsp.stopIncomplete();
+                                },
+                                child: const Text('Stop'),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
