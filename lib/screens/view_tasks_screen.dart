@@ -34,24 +34,28 @@ class _ViewTasksScreenState extends State<ViewTasksScreen> {
             if (snapshot.hasData) {
               if (snapshot.data!.isEmpty) {
                 children = [
-                  Container(
+                  Padding(
                     padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color:
-                          Provider.of<SettingsProvider>(context).theme == 'dark'
-                              ? kBgClr2Dark
-                              : kBgClr2,
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: Text(
-                      'There are no tasks!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Provider.of<SettingsProvider>(context).theme ==
-                                  'dark'
-                              ? kTextClr2Dark
-                              : kTextClr),
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Provider.of<SettingsProvider>(context).theme ==
+                                'dark'
+                            ? kBgClr2Dark
+                            : kBgClr2,
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Text(
+                        'There are no tasks!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 18,
+                            color:
+                                Provider.of<SettingsProvider>(context).theme ==
+                                        'dark'
+                                    ? kTextClr2Dark
+                                    : kTextClr),
+                      ),
                     ),
                   )
                 ];
