@@ -1,7 +1,12 @@
 // ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:pomodoro/components/change_time_card.dart';
+import 'package:pomodoro/components/navigator_card.dart';
+import 'package:pomodoro/constants/constant.dart';
+import 'package:pomodoro/screens/new_session_screen.dart';
+import 'package:pomodoro/viewmodels/settings_provider.dart';
+import 'package:provider/provider.dart';
 
 class CustomWidget extends StatefulWidget {
   static const routeName = '/widget-testing';
@@ -31,14 +36,37 @@ class _CustomWidgetState extends State<CustomWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final bgColor = Provider.of<SettingsProvider>(context).theme == 'dark'
+        ? kBgClrNoOpDark
+        : kBgClrNoOp;
+    final bgColor2 = Provider.of<SettingsProvider>(context).theme == 'dark'
+        ? kBgClr2Dark
+        : kBgClr2;
+    final textColor = Provider.of<SettingsProvider>(context).theme == 'dark'
+        ? kTextClrDark
+        : kTextClr;
+    final textColor2 = Provider.of<SettingsProvider>(context).theme == 'dark'
+        ? kTextClr2Dark
+        : kTextClr2;
+
     return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ChangeTimeCard(onChange: (Duration d) {}),
-          ],
+      backgroundColor: bgColor,
+      body: SafeArea(
+        child: Container(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              NavigatorCard(
+                icon: Icons.timelapse,
+                onPress: () {
+                  Navigator.pushNamed(context, NewSessionScreen.routeName);
+                },
+                title: 'Quick Session',
+                subtitle:
+                    'Start a new session without any hastle of configuring',
+              ),
+            ],
+          ),
         ),
       ),
     );

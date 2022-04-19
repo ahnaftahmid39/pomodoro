@@ -1,6 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:pomodoro/components/custom_widget_test.dart';
+import 'package:pomodoro/components/navigator_card.dart';
 import 'package:pomodoro/constants/constant.dart';
+import 'package:pomodoro/screens/new_session_screen.dart';
+import 'package:pomodoro/screens/new_task_screen.dart';
+import 'package:pomodoro/screens/settings_screen.dart';
 import 'package:pomodoro/screens/view_tasks_screen.dart';
 import 'package:pomodoro/viewmodels/settings_provider.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Provider.of<SettingsProvider>(context).theme == 'dark'
+          ? kBgClrNoOpDark
+          : kBgClrNoOp,
       body: SafeArea(
         child: Stack(
           children: <Widget>[
@@ -25,73 +33,61 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment.bottomCenter,
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 50),
               child: Image.asset(
-                'assets/images/tomato.png',
+                Provider.of<SettingsProvider>(context).theme == 'dark'
+                    ? 'assets/images/tomato_dark.png'
+                    : 'assets/images/tomato.png',
               ),
             ),
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                  color: Provider.of<SettingsProvider>(context).theme == 'dark'
-                      ? kBgClrNoOpDark
-                      : kBgClr),
+              child: Container(color: Colors.transparent),
             ),
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                      child: const Text('New Session'),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/new-session');
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                      child: const Text('New Task'),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/new-task');
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                      child: const Text('History'),
-                      onPressed: () {
-                        Navigator.pushNamed(context, ViewTasksScreen.routeName);
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                      child: const Text('Settings'),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/settings');
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                      child: const Text('WidgetTesting'),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/widget-testing');
-                      },
-                    ),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height / 3),
-                ],
-              ),
+            ListView(
+              children: <Widget>[
+                NavigatorCard(
+                  icon: Icons.timelapse,
+                  onPress: () {
+                    Navigator.pushNamed(context, NewSessionScreen.routeName);
+                  },
+                  title: 'Quick session',
+                  subtitle:
+                      'Start a quick new session without any hastle of configuration',
+                ),
+                NavigatorCard(
+                  icon: Icons.task,
+                  onPress: () {
+                    Navigator.pushNamed(context, NewTaskScreen.routeName);
+                  },
+                  title: 'New Task',
+                  subtitle: 'Start a new task by defining your choices',
+                ),
+                NavigatorCard(
+                  icon: Icons.history,
+                  onPress: () {
+                    Navigator.pushNamed(context, ViewTasksScreen.routeName);
+                  },
+                  title: 'View Tasks',
+                  subtitle:
+                      'View a history of your tasks. You can continue to do any task from here.',
+                ),
+                NavigatorCard(
+                  icon: Icons.settings,
+                  onPress: () {
+                    Navigator.pushNamed(context, SettingsScreen.routeName);
+                  },
+                  title: 'Settings',
+                  subtitle: 'Configure your preferences here',
+                ),
+                NavigatorCard(
+                  icon: Icons.smart_toy_outlined,
+                  onPress: () {
+                    Navigator.pushNamed(context, CustomWidget.routeName);
+                  },
+                  title: 'Widget Test',
+                  subtitle: 'Testing some widgets (Dev only)',
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height / 3),
+              ],
             )
           ],
         ),

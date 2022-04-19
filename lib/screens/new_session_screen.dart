@@ -22,86 +22,75 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Provider.of<SettingsProvider>(context).theme == 'dark'
+          ? kBgClrNoOpDark
+          : kBgClrNoOp,
       body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Container(
-                color: Provider.of<SettingsProvider>(context).theme == 'dark'
-                    ? kBgClrNoOpDark
-                    : kBgClrNoOp),
-            Container(
-              alignment: Alignment.center,
-              child: ChangeNotifierProvider(
-                create: (_) => SessionSettings(),
-                builder: (context, _) {
-                  return ListView(
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      ChangeTimeCard(
-                        cardTitle: 'Session Duration',
-                        defaultDuration: const Duration(minutes: 25),
-                        onChange: (Duration duration) {
-                          final sessionSettings = Provider.of<SessionSettings>(
-                              context,
-                              listen: false);
-                          sessionSettings.sessionDuration = duration;
-                        },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      // ignore: prefer_const_constructors
-                      ChangeTimeCard(
-                        cardTitle: 'Break Duration',
-                        defaultDuration: const Duration(minutes: 5),
-                        onChange: (Duration duration) {
-                          final sessionSettings = Provider.of<SessionSettings>(
-                              context,
-                              listen: false);
-                          sessionSettings.breakDuration = duration;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Session session = Provider.of<SessionSettings>(
-                                      context,
-                                      listen: false)
-                                  .session;
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SessionScreen(
-                                    session: session,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: const Text('Start'),
+        child: ChangeNotifierProvider(
+          create: (_) => SessionSettings(),
+          builder: (context, _) {
+            return ListView(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                ChangeTimeCard(
+                  cardTitle: 'Session Duration',
+                  defaultDuration: const Duration(minutes: 25),
+                  onChange: (Duration duration) {
+                    final sessionSettings =
+                        Provider.of<SessionSettings>(context, listen: false);
+                    sessionSettings.sessionDuration = duration;
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                // ignore: prefer_const_constructors
+                ChangeTimeCard(
+                  cardTitle: 'Break Duration',
+                  defaultDuration: const Duration(minutes: 5),
+                  onChange: (Duration duration) {
+                    final sessionSettings =
+                        Provider.of<SessionSettings>(context, listen: false);
+                    sessionSettings.breakDuration = duration;
+                  },
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Session session =
+                            Provider.of<SessionSettings>(context, listen: false)
+                                .session;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SessionScreen(
+                              session: session,
+                            ),
                           ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Go Home'),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: MediaQuery.of(context).size.height / 3),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ],
+                        );
+                      },
+                      child: const Text('Start'),
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Go Home'),
+                    ),
+                  ],
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height / 3),
+              ],
+            );
+          },
         ),
       ),
     );

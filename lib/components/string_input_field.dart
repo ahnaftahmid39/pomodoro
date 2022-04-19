@@ -23,7 +23,7 @@ class StringInputField extends StatelessWidget {
             padding: const EdgeInsets.only(left: 12.0, bottom: 4.0),
             child: Text(
               '$helperText',
-              style:  TextStyle(
+              style: TextStyle(
                   color: Provider.of<SettingsProvider>(context).theme == 'dark'
                       ? kTextClr2Dark
                       : kTextClr2,
@@ -39,7 +39,7 @@ class StringInputField extends StatelessWidget {
                   : kBgClr2),
           child: TextField(
             controller: controller,
-            autofocus: true,
+            // autofocus: true,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 18,

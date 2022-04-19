@@ -23,8 +23,8 @@ class NumberInputField extends StatelessWidget {
               '$helperText',
               style: TextStyle(
                   color: Provider.of<SettingsProvider>(context).theme == 'dark'
-                      ? kTextClrDark
-                      : kTextClr,
+                      ? kTextClr2Dark
+                      : kTextClr2,
                   fontSize: 14,
                   fontWeight: FontWeight.bold),
             ),
@@ -47,7 +47,7 @@ class NumberInputField extends StatelessWidget {
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
                   ],
                   textAlign: TextAlign.center,
-                  autofocus: true,
+                  // autofocus: true,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,

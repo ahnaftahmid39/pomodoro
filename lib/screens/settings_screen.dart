@@ -189,12 +189,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Provider.of<SettingsProvider>(context).theme == 'dark'
-            ? kBgClrNoOpDark
-            : kBgClrNoOp,
-        body: Padding(
+    return Scaffold(
+      backgroundColor: Provider.of<SettingsProvider>(context).theme == 'dark'
+          ? kBgClrNoOpDark
+          : kBgClrNoOp,
+      body: SafeArea(
+        child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Consumer<SettingsProvider>(
             builder: (context, settings, _) => ListView(

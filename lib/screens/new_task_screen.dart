@@ -41,6 +41,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Provider.of<SettingsProvider>(context).theme == 'dark'
+          ? kBgClrNoOpDark
+          : kBgClrNoOp,
       body: SafeArea(
         child: Stack(
           children: [

@@ -19,32 +19,56 @@ class _ViewTasksScreenState extends State<ViewTasksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Provider.of<SettingsProvider>(context).theme == 'dark'
+          ? kBgClrNoOpDark
+          : kBgClrNoOp,
       body: SafeArea(
-        child: Stack(
-          children: [
-            Container(
-                color: Provider.of<SettingsProvider>(context).theme == 'dark'
-                    ? kBgClrDark
-                    : kBgClr),
-            FutureBuilder(
-              future: TaskModel.getData(),
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<List<TaskModel>> snapshot,
-              ) {
-                List<Widget> children;
+        child: FutureBuilder(
+          future: TaskModel.getData(),
+          builder: (
+            BuildContext context,
+            AsyncSnapshot<List<TaskModel>> snapshot,
+          ) {
+            List<Widget> children;
 
-                if (snapshot.hasData) {
-                  children = snapshot.data!
-                      .map(
-                        (task) => Card(
+            if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
+                children = [
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color:
+                          Provider.of<SettingsProvider>(context).theme == 'dark'
+                              ? kBgClr2Dark
+                              : kBgClr2,
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    child: Text(
+                      'There are no tasks!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Provider.of<SettingsProvider>(context).theme ==
+                                  'dark'
+                              ? kTextClr2Dark
+                              : kTextClr),
+                    ),
+                  )
+                ];
+              } else {
+                children = snapshot.data!
+                    .map(
+                      (task) => Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, right: 16.0, top: 8, bottom: 8),
+                        child: Card(
                           borderOnForeground: true,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           child: ListTile(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                             tileColor:
                                 Provider.of<SettingsProvider>(context).theme ==
@@ -144,24 +168,21 @@ class _ViewTasksScreenState extends State<ViewTasksScreen> {
                             ),
                           ),
                         ),
-                      )
-                      .toList()
-                      .reversed
-                      .toList();
-                } else {
-                  children = [
-                    const Center(child: CircularProgressIndicator()),
-                  ];
-                }
-                return Container(
-                  padding: const EdgeInsets.all(16),
-                  child: ListView(
-                    children: children,
-                  ),
-                );
-              },
-            ),
-          ],
+                      ),
+                    )
+                    .toList()
+                    .reversed
+                    .toList();
+              }
+            } else {
+              children = [
+                const Center(child: CircularProgressIndicator()),
+              ];
+            }
+            return ListView(
+              children: children,
+            );
+          },
         ),
       ),
     );
