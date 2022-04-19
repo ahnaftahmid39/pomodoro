@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pomodoro/constants/constant.dart';
+import 'package:pomodoro/screens/new_task_screen.dart';
 import 'package:pomodoro/util/task.dart';
 import 'package:pomodoro/util/util_functions.dart';
 import 'package:pomodoro/viewmodels/settings_provider.dart';
@@ -39,7 +40,8 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
                       onPressed: () {
                         Provider.of<TaskSessionProvider>(context, listen: false)
                             .stop();
-                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                            context, NewTaskScreen.routeName);
                       },
                       child: const Text('Go back'),
                     ),

@@ -129,7 +129,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                           taskSettings.lbsCount = int.parse(
                               _longBreakAfterSessionCountController.text);
                           await taskSettings.saveTask();
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (BuildContext context) =>
