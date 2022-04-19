@@ -39,15 +39,15 @@ class _CustomWidgetState extends State<CustomWidget> {
     final bgColor = Provider.of<SettingsProvider>(context).theme == 'dark'
         ? kBgClrNoOpDark
         : kBgClrNoOp;
-    final bgColor2 = Provider.of<SettingsProvider>(context).theme == 'dark'
-        ? kBgClr2Dark
-        : kBgClr2;
-    final textColor = Provider.of<SettingsProvider>(context).theme == 'dark'
-        ? kTextClrDark
-        : kTextClr;
-    final textColor2 = Provider.of<SettingsProvider>(context).theme == 'dark'
-        ? kTextClr2Dark
-        : kTextClr2;
+    // final bgColor2 = Provider.of<SettingsProvider>(context).theme == 'dark'
+    //     ? kBgClr2Dark
+    //     : kBgClr2;
+    // final textColor = Provider.of<SettingsProvider>(context).theme == 'dark'
+    //     ? kTextClrDark
+    //     : kTextClr;
+    // final textColor2 = Provider.of<SettingsProvider>(context).theme == 'dark'
+    //     ? kTextClr2Dark
+    //     : kTextClr2;
 
     return Scaffold(
       backgroundColor: bgColor,

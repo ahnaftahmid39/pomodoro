@@ -52,7 +52,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  flutter_launcher_icons_maker: ^0.10.2
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/tomato.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

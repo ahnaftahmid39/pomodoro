@@ -9,7 +9,6 @@ import 'package:pomodoro/util/sound.dart';
 import 'package:pomodoro/util/util_functions.dart';
 import 'package:pomodoro/viewmodels/settings_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 
 class SessionScreen extends StatefulWidget {
   static const routeName = '/session';

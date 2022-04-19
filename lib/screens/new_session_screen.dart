@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:pomodoro/components/change_time_card.dart';
 import 'package:pomodoro/constants/constant.dart';
