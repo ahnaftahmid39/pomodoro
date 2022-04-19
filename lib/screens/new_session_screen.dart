@@ -2,9 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:pomodoro/components/change_time_card.dart';
+import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/screens/session_screen.dart';
 import 'package:pomodoro/util/session.dart';
 import 'package:pomodoro/viewmodels/session_settings.dart';
+import 'package:pomodoro/viewmodels/settings_provider.dart';
 import 'package:provider/provider.dart';
 
 class NewSessionScreen extends StatefulWidget {
@@ -23,10 +25,10 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(color: const Color.fromRGBO(224, 95, 82, 0.6)),
-            ),
+            Container(
+                color: Provider.of<SettingsProvider>(context).theme == 'dark'
+                    ? kBgClrNoOpDark
+                    : kBgClrNoOp),
             Container(
               alignment: Alignment.center,
               child: ChangeNotifierProvider(

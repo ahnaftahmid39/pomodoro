@@ -1,6 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/screens/view_tasks_screen.dart';
+import 'package:pomodoro/viewmodels/settings_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/';
@@ -27,7 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(color: const Color.fromRGBO(224, 95, 82, 0.6)),
+              child: Container(
+                  color: Provider.of<SettingsProvider>(context).theme == 'dark'
+                      ? kBgClrNoOpDark
+                      : kBgClr),
             ),
             SingleChildScrollView(
               child: Column(

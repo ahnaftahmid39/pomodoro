@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
+import 'package:pomodoro/components/change_time_card.dart';
 
 class CustomWidget extends StatefulWidget {
   static const routeName = '/widget-testing';
@@ -35,8 +36,8 @@ class _CustomWidgetState extends State<CustomWidget> {
         alignment: Alignment.center,
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: const [
-
+          children: [
+            ChangeTimeCard(onChange: (Duration d) {}),
           ],
         ),
       ),

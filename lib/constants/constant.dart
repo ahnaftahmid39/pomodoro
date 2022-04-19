@@ -15,7 +15,7 @@ const kClkBgClr = kBgClr3;
 
 // for dark theme:
 
-const kBgClrDark = Color.fromRGBO(6, 4, 32, 90);
+const kBgClrDark = Color.fromRGBO(6, 4, 32, 0.95);
 const kBgClrNoOpDark = Color(0xFF1F1D36);
 const kBgClr2Dark = Color(0xFF3F3351);
 const kBgClr3Dark = Color(0xFFE9A6A6);

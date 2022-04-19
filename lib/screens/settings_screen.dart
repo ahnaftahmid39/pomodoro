@@ -14,60 +14,76 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void showThemeModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: kBgClr4,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16.0),
-          topRight: Radius.circular(16.0),
-        ),
-      ),
+      backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return Consumer<SettingsProvider>(
-          builder: (context, settings, _) => Container(
-            padding: const EdgeInsets.all(16),
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Choose a theme',
-                      style: TextStyle(
-                        color: kTextClr,
-                        fontSize: 16,
+          builder: (context, settings, _) {
+            Color textColor =
+                settings.theme == 'dark' ? kTextClrDark : kTextClr;
+            return Container(
+              decoration: BoxDecoration(
+                color: settings.theme == 'dark' ? kBgClr2Dark : kBgClr4,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Choose a theme',
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.close,
+                            color: settings.theme == 'dark'
+                                ? Colors.white
+                                : Colors.black),
+                      )
+                    ],
+                  ),
+                  RadioListTile(
+                    activeColor: textColor,
+                    title: Text(
+                      'Dark',
+                      style: TextStyle(color: textColor),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.close),
-                    )
-                  ],
-                ),
-                RadioListTile(
-                  title: const Text('Dark'),
-                  value: 'dark',
-                  groupValue: settings.theme,
-                  onChanged: (String? val) {
-                    if (val != null) settings.theme = val;
-                  },
-                ),
-                const Divider(
-                  color: kTextClr,
-                ),
-                RadioListTile(
-                  title: const Text('Light'),
-                  value: 'light',
-                  groupValue: settings.theme,
-                  onChanged: (String? val) {
-                    if (val != null) settings.theme = val;
-                  },
-                ),
-              ],
-            ),
-          ),
+                    value: 'dark',
+                    groupValue: settings.theme,
+                    onChanged: (String? val) {
+                      if (val != null) settings.theme = val;
+                    },
+                  ),
+                  Divider(
+                    color: textColor,
+                  ),
+                  RadioListTile(
+                    activeColor: textColor,
+                    title: Text('Light', style: TextStyle(color: textColor)),
+                    value: 'light',
+                    groupValue: settings.theme,
+                    onChanged: (String? val) {
+                      if (val != null) settings.theme = val;
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
         );
       },
     );
@@ -76,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void showAlarmToneModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: kBgClr4,
+      backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16.0),
@@ -85,73 +101,87 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       builder: (BuildContext context) {
         return Consumer<SettingsProvider>(
-          builder: (context, settings, _) => Container(
-            padding: const EdgeInsets.all(16),
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Choose a alarm tone!',
-                      style: TextStyle(
-                        color: kTextClr,
-                        fontSize: 16,
+          builder: (context, settings, _) {
+            Color textColor =
+                settings.theme == 'dark' ? kTextClrDark : kTextClr;
+            return Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: settings.theme == 'dark' ? kBgClr2Dark : kBgClr4,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+              ),
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Choose a alarm tone!',
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 16,
+                        ),
                       ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.close, color: textColor),
+                      )
+                    ],
+                  ),
+                  RadioListTile(
+                    activeColor: textColor,
+                    title: Text(
+                      'Morning birds',
+                      style: TextStyle(color: textColor),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.close),
-                    )
-                  ],
-                ),
-                RadioListTile(
-                  title: const Text('Morning birds'),
-                  value: 'morning-birds',
-                  groupValue: settings.alarmTone,
-                  onChanged: (String? val) {
-                    if (val != null) settings.alarmTone = val;
-                  },
-                ),
-                const Divider(
-                  color: kTextClr,
-                ),
-                RadioListTile(
-                  title: const Text('Ocean waves'),
-                  value: 'ocean-waves',
-                  groupValue: settings.alarmTone,
-                  onChanged: (String? val) {
-                    if (val != null) settings.alarmTone = val;
-                  },
-                ),
-                const Divider(
-                  color: kTextClr,
-                ),
-                RadioListTile(
-                  title: const Text('Telephone'),
-                  value: 'telephone',
-                  groupValue: settings.alarmTone,
-                  onChanged: (String? val) {
-                    if (val != null) settings.alarmTone = val;
-                  },
-                ),
-                const Divider(
-                  color: kTextClr,
-                ),
-                RadioListTile(
-                  title: const Text('default'),
-                  value: 'default',
-                  groupValue: settings.alarmTone,
-                  onChanged: (String? val) {
-                    if (val != null) settings.alarmTone = val;
-                  },
-                ),
-              ],
-            ),
-          ),
+                    value: 'morning-birds',
+                    groupValue: settings.alarmTone,
+                    onChanged: (String? val) {
+                      if (val != null) settings.alarmTone = val;
+                    },
+                  ),
+                  Divider(color: textColor),
+                  RadioListTile(
+                    activeColor: textColor,
+                    title:
+                        Text('Ocean waves', style: TextStyle(color: textColor)),
+                    value: 'ocean-waves',
+                    groupValue: settings.alarmTone,
+                    onChanged: (String? val) {
+                      if (val != null) settings.alarmTone = val;
+                    },
+                  ),
+                  Divider(color: textColor),
+                  RadioListTile(
+                    activeColor: textColor,
+                    title:
+                        Text('Telephone', style: TextStyle(color: textColor)),
+                    value: 'telephone',
+                    groupValue: settings.alarmTone,
+                    onChanged: (String? val) {
+                      if (val != null) settings.alarmTone = val;
+                    },
+                  ),
+                  Divider(color: textColor),
+                  RadioListTile(
+                    activeColor: textColor,
+                    title: Text('default', style: TextStyle(color: textColor)),
+                    value: 'default',
+                    groupValue: settings.alarmTone,
+                    onChanged: (String? val) {
+                      if (val != null) settings.alarmTone = val;
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
         );
       },
     );
@@ -161,7 +191,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: kBgClrNoOp,
+        backgroundColor: Provider.of<SettingsProvider>(context).theme == 'dark'
+            ? kBgClrNoOpDark
+            : kBgClrNoOp,
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Consumer<SettingsProvider>(
@@ -176,60 +208,100 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 SwitchListTile(
-                  // tileColor: kBgClr2,
-                  secondary: const Icon(Icons.notifications),
+                  // tileColor: Provider.of<SettingsProvider>(context).theme == 'dark' ? kBgClr2Dark : kBgClr2,
+                  secondary: Icon(Icons.notifications,
+                      color:
+                          Provider.of<SettingsProvider>(context).theme == 'dark'
+                              ? kTextClrDark
+                              : kTextClr),
                   contentPadding: const EdgeInsets.all(16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0)),
-                  title: const Text(
+                  title: Text(
                     'Enable Notifications',
-                    style: TextStyle(color: kTextClr),
+                    style: TextStyle(
+                        color: Provider.of<SettingsProvider>(context).theme ==
+                                'dark'
+                            ? kTextClrDark
+                            : kTextClr),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Check to enable notifications when a session event occurs',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                        color: Provider.of<SettingsProvider>(context).theme ==
+                                'dark'
+                            ? Colors.white
+                            : Colors.black),
                   ),
                   value: settings.notificationEnabled,
                   onChanged: (bool newValue) {
                     settings.notificationEnabled = newValue;
                   },
                 ),
-                const Divider(
-                  color: kTextClr,
+                Divider(
+                  color: Provider.of<SettingsProvider>(context).theme == 'dark'
+                      ? kTextClrDark
+                      : kTextClr,
                 ),
                 SwitchListTile(
-                  secondary: const Icon(Icons.schedule),
+                  secondary: Icon(Icons.schedule,
+                      color:
+                          Provider.of<SettingsProvider>(context).theme == 'dark'
+                              ? kTextClrDark
+                              : kTextClr),
                   contentPadding: const EdgeInsets.all(16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0)),
-                  title: const Text(
+                  title: Text(
                     'Enable auto break session',
-                    style: TextStyle(color: kTextClr),
+                    style: TextStyle(
+                        color: Provider.of<SettingsProvider>(context).theme ==
+                                'dark'
+                            ? kTextClrDark
+                            : kTextClr),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Enables automatic start of break session',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                        color: Provider.of<SettingsProvider>(context).theme ==
+                                'dark'
+                            ? Colors.white
+                            : Colors.black),
                   ),
                   value: settings.autoBreakEnabled,
                   onChanged: (bool newValue) {
                     settings.autoBreakEnabled = newValue;
                   },
                 ),
-                const Divider(
-                  color: kTextClr,
+                Divider(
+                  color: Provider.of<SettingsProvider>(context).theme == 'dark'
+                      ? kTextClrDark
+                      : kTextClr,
                 ),
                 ListTile(
                   onTap: () {
                     showAlarmToneModal(context);
                   },
-                  leading: const Icon(Icons.alarm),
-                  title: const Text(
+                  leading: Icon(Icons.alarm,
+                      color:
+                          Provider.of<SettingsProvider>(context).theme == 'dark'
+                              ? kTextClrDark
+                              : kTextClr),
+                  title: Text(
                     'Alarm tone',
-                    style: TextStyle(color: kTextClr),
+                    style: TextStyle(
+                        color: Provider.of<SettingsProvider>(context).theme ==
+                                'dark'
+                            ? kTextClrDark
+                            : kTextClr),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Sets your favorite alarm tone',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                        color: Provider.of<SettingsProvider>(context).theme ==
+                                'dark'
+                            ? Colors.white
+                            : Colors.black),
                   ),
                   trailing: Text(
                     settings.alarmTone,
@@ -240,21 +312,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0)),
                 ),
-                const Divider(
-                  color: kTextClr,
+                Divider(
+                  color: Provider.of<SettingsProvider>(context).theme == 'dark'
+                      ? kTextClrDark
+                      : kTextClr,
                 ),
                 ListTile(
                   onTap: () {
                     showThemeModal(context);
                   },
-                  leading: const Icon(Icons.color_lens),
-                  title: const Text(
-                    'Theme',
-                    style: TextStyle(color: kTextClr),
+                  leading: Icon(
+                    Icons.color_lens,
+                    color:
+                        Provider.of<SettingsProvider>(context).theme == 'dark'
+                            ? kTextClrDark
+                            : kTextClr,
                   ),
-                  subtitle: const Text(
+                  title: Text(
+                    'Theme',
+                    style: TextStyle(
+                        color: Provider.of<SettingsProvider>(context).theme ==
+                                'dark'
+                            ? kTextClrDark
+                            : kTextClr),
+                  ),
+                  subtitle: Text(
                     'Change your app theme',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                        color: Provider.of<SettingsProvider>(context).theme ==
+                                'dark'
+                            ? Colors.white
+                            : Colors.black),
                   ),
                   trailing: Text(
                     settings.theme,

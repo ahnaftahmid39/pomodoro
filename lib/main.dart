@@ -37,21 +37,33 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: getMaterialcolor(kBgClr2),
-          textTheme: const TextTheme(
+          primarySwatch: getMaterialcolor(
+              Provider.of<SettingsProvider>(context).theme == 'dark'
+                  ? kBgClr2Dark
+                  : kBgClr2),
+          textTheme: TextTheme(
             bodySmall: TextStyle(
-              color: kTextClr,
+              color: Provider.of<SettingsProvider>(context).theme == 'dark'
+                  ? kTextClrDark
+                  : kTextClr,
               fontSize: 12.0,
             ),
             displayMedium: TextStyle(
-              color: kTextClr2,
+              color: Provider.of<SettingsProvider>(context).theme == 'dark'
+                  ? kTextClr2Dark
+                  : kTextClr2,
               fontSize: 20.0,
             ),
           ),
           backgroundColor: Colors.white,
           textSelectionTheme: TextSelectionThemeData(
-            cursorColor: kTextClr.withOpacity(0.9),
-            selectionHandleColor: kTextClr.withOpacity(0.7),
+            cursorColor: Provider.of<SettingsProvider>(context).theme == 'dark'
+                ? kTextClrDark
+                : kTextClr.withOpacity(0.9),
+            selectionHandleColor:
+                Provider.of<SettingsProvider>(context).theme == 'dark'
+                    ? kTextClrDark
+                    : kTextClr.withOpacity(0.7),
           ),
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
             backgroundColor: Color(0xFFE47769),
@@ -66,7 +78,10 @@ class MyApp extends StatelessWidget {
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
               enableFeedback: false,
-              backgroundColor: MaterialStateProperty.all(kBtnBgClr),
+              backgroundColor: MaterialStateProperty.all(
+                  Provider.of<SettingsProvider>(context).theme == 'dark'
+                      ? kBtnBgClrDark
+                      : kBtnBgClr),
               textStyle:
                   MaterialStateProperty.all(const TextStyle(fontSize: 16)),
               overlayColor:

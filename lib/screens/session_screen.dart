@@ -124,7 +124,9 @@ class _SessionScreenState extends State<SessionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBgClrNoOp,
+      backgroundColor: Provider.of<SettingsProvider>(context).theme == 'dark'
+          ? kBgClrNoOpDark
+          : kBgClrNoOp,
       body: SafeArea(
         child: Consumer<SettingsProvider>(
           builder: (context, settings, _) => ListView(
@@ -165,7 +167,12 @@ class _SessionScreenState extends State<SessionScreen> {
                 alignment: Alignment.center,
                 child: Text(
                   getTitleBasedOnState(),
-                  style: const TextStyle(color: kTextClr, fontSize: 24),
+                  style: TextStyle(
+                      color:
+                          Provider.of<SettingsProvider>(context).theme == 'dark'
+                              ? kTextClrDark
+                              : kTextClr,
+                      fontSize: 24),
                 ),
               ),
               const SizedBox(
@@ -194,7 +201,11 @@ class _SessionScreenState extends State<SessionScreen> {
                           height: 200,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            backgroundColor: kBgClr2,
+                            backgroundColor:
+                                Provider.of<SettingsProvider>(context).theme ==
+                                        'dark'
+                                    ? kBgClr2Dark
+                                    : kBgClr2,
                             color: kBgClr4,
                             value:
                                 d != null ? d.inSeconds / fixed.inSeconds : 0,
@@ -205,7 +216,11 @@ class _SessionScreenState extends State<SessionScreen> {
                         child: Text(
                           '${durationHoursPart(d!)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
                           style: GoogleFonts.zcoolQingKeHuangYou(
-                            color: kTextClr,
+                            color:
+                                Provider.of<SettingsProvider>(context).theme ==
+                                        'dark'
+                                    ? kTextClrDark
+                                    : kTextClr,
                             fontSize: 36,
                           ),
                         ),

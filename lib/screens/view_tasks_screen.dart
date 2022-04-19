@@ -3,6 +3,8 @@ import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/models/task_model.dart';
 import 'package:pomodoro/screens/task_session_screen.dart';
 import 'package:pomodoro/util/util_functions.dart';
+import 'package:pomodoro/viewmodels/settings_provider.dart';
+import 'package:provider/provider.dart';
 
 class ViewTasksScreen extends StatefulWidget {
   const ViewTasksScreen({Key? key}) : super(key: key);
@@ -21,8 +23,9 @@ class _ViewTasksScreenState extends State<ViewTasksScreen> {
         child: Stack(
           children: [
             Container(
-              color: kBgClr,
-            ),
+                color: Provider.of<SettingsProvider>(context).theme == 'dark'
+                    ? kBgClrDark
+                    : kBgClr),
             FutureBuilder(
               future: TaskModel.getData(),
               builder: (
@@ -43,11 +46,19 @@ class _ViewTasksScreenState extends State<ViewTasksScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            tileColor: kBgClr4,
+                            tileColor:
+                                Provider.of<SettingsProvider>(context).theme ==
+                                        'dark'
+                                    ? kBgClr2Dark
+                                    : kBgClr4,
                             title: Text(
                               task.name,
-                              style: const TextStyle(
-                                  color: Colors.black,
+                              style: TextStyle(
+                                  color: Provider.of<SettingsProvider>(context)
+                                              .theme ==
+                                          'dark'
+                                      ? Colors.white
+                                      : Colors.black,
                                   fontWeight: FontWeight.bold),
                             ),
                             contentPadding: const EdgeInsets.all(16),
@@ -96,9 +107,15 @@ class _ViewTasksScreenState extends State<ViewTasksScreen> {
                                               ),
                                             );
                                           },
-                                          icon: const Icon(
+                                          icon: Icon(
                                             Icons.play_arrow,
-                                            color: Colors.black,
+                                            color:
+                                                Provider.of<SettingsProvider>(
+                                                                context)
+                                                            .theme ==
+                                                        'dark'
+                                                    ? Colors.white
+                                                    : Colors.black,
                                           ),
                                         ),
                                       const SizedBox(
@@ -110,7 +127,15 @@ class _ViewTasksScreenState extends State<ViewTasksScreen> {
                                           TaskModel.deleteById(task.taskID!);
                                           setState(() {});
                                         },
-                                        icon: const Icon(Icons.delete),
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Provider.of<SettingsProvider>(
+                                                          context)
+                                                      .theme ==
+                                                  'dark'
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
                                       ),
                                     ],
                                   ),

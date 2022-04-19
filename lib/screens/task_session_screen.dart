@@ -26,7 +26,9 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
         child: Stack(
           children: [
             Container(
-              color: kBgClr,
+              color: Provider.of<SettingsProvider>(context).theme == 'dark'
+                  ? kBgClrNoOpDark
+                  : kBgClrNoOp,
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -53,8 +55,11 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
                       Text(
                         'Task: ${widget.task.taskName}',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: kTextClr,
+                        style: TextStyle(
+                          color: Provider.of<SettingsProvider>(context).theme ==
+                                  'dark'
+                              ? kTextClrDark
+                              : kTextClr,
                           fontSize: 24,
                         ),
                       ),
@@ -64,9 +69,18 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16.0),
-                            color: kBtnBgClr.withOpacity(0.8)),
+                            color:
+                                Provider.of<SettingsProvider>(context).theme ==
+                                        'dark'
+                                    ? kBtnBgClrDark
+                                    : kBtnBgClr.withOpacity(0.8)),
                         child: SwitchListTile(
-                          activeTrackColor: HSLColor.fromColor(kBgClr2)
+                          activeTrackColor: HSLColor.fromColor(
+                                  Provider.of<SettingsProvider>(context)
+                                              .theme ==
+                                          'dark'
+                                      ? kBgClr2Dark
+                                      : kBgClr2)
                               .withLightness(0.55)
                               .toColor(),
                           title: const Text(
@@ -107,9 +121,13 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
                             Text(
                               'Session completed: ${tsp.sessionCompletedCount}/${tsp.task.sessionCount}',
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
-                                color: kTextClr,
+                                color: Provider.of<SettingsProvider>(context)
+                                            .theme ==
+                                        'dark'
+                                    ? kTextClrDark
+                                    : kTextClr,
                               ),
                             ),
                             const SizedBox(
@@ -134,7 +152,13 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
                                     child: Text(
                                       '${durationHoursPart(d)}:${durationMinutesPart(d)}:${durationSecondsPart(d)}',
                                       style: GoogleFonts.zcoolQingKeHuangYou(
-                                          color: kTextClr, fontSize: 36),
+                                          color: Provider.of<SettingsProvider>(
+                                                          context)
+                                                      .theme ==
+                                                  'dark'
+                                              ? kTextClrDark
+                                              : kTextClr,
+                                          fontSize: 36),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -151,15 +175,23 @@ class _TaskSessionScreenState extends State<TaskSessionScreen> {
                         return Container(
                           padding: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
-                            color: kBgClr4,
+                            color:
+                                Provider.of<SettingsProvider>(context).theme ==
+                                        'dark'
+                                    ? kBgClr2Dark
+                                    : kBgClr4,
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                           child: Text(
                             stateToDisplay[tsp.state]!,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
-                              color: kTextClr,
+                              color: Provider.of<SettingsProvider>(context)
+                                          .theme ==
+                                      'dark'
+                                  ? kTextClrDark
+                                  : kTextClr,
                             ),
                           ),
                         );

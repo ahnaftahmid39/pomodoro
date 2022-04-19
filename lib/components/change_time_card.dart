@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pomodoro/components/change_time_button.dart';
 import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/util/util_functions.dart';
+import 'package:pomodoro/viewmodels/settings_provider.dart';
+import 'package:provider/provider.dart';
 
 typedef ChangeTimeCallback = void Function(Duration);
 
@@ -173,8 +175,10 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
     return Container(
       padding: const EdgeInsets.all(16.0),
       margin: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-      decoration: const BoxDecoration(
-        color: kBtnBgClr,
+      decoration: BoxDecoration(
+        color: Provider.of<SettingsProvider>(context).theme == 'dark'
+            ? kBtnBgClrDark
+            : kBtnBgClr,
       ),
       child: Column(
         children: [
@@ -198,9 +202,12 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
                     height: 15,
                   ),
                   Container(
-                    decoration: const BoxDecoration(
-                      color: kClkBgClr,
-                      borderRadius: BorderRadius.all(
+                    decoration: BoxDecoration(
+                      color:
+                          Provider.of<SettingsProvider>(context).theme == 'dark'
+                              ? kClkBgClrDark
+                              : kClkBgClr,
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(8.0),
                       ),
                     ),
@@ -218,7 +225,10 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
                         ),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.zcoolQingKeHuangYou(
-                          color: kTextClr,
+                          color: Provider.of<SettingsProvider>(context).theme ==
+                                  'dark'
+                              ? kBgClrNoOpDark
+                              : kTextClr,
                           fontSize: 32,
                         ),
                       ),
@@ -227,10 +237,13 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
                   const SizedBox(
                     height: 5,
                   ),
-                  const Text(
+                  Text(
                     'Hours',
                     style: TextStyle(
-                      color: kTextClr,
+                      color:
+                          Provider.of<SettingsProvider>(context).theme == 'dark'
+                              ? kTextClrDark
+                              : kTextClr,
                       fontWeight: FontWeight.bold,
                     ),
                   )
@@ -259,9 +272,12 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
                     height: 15,
                   ),
                   Container(
-                    decoration: const BoxDecoration(
-                      color: kClkBgClr,
-                      borderRadius: BorderRadius.all(
+                    decoration: BoxDecoration(
+                      color:
+                          Provider.of<SettingsProvider>(context).theme == 'dark'
+                              ? kClkBgClrDark
+                              : kClkBgClr,
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(8.0),
                       ),
                     ),
@@ -279,7 +295,10 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
                         ),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.zcoolQingKeHuangYou(
-                          color: kTextClr,
+                          color: Provider.of<SettingsProvider>(context).theme ==
+                                  'dark'
+                              ? kBgClrNoOpDark
+                              : kTextClr,
                           fontSize: 32,
                         ),
                       ),
@@ -288,10 +307,13 @@ class _ChangeTimeCardState extends State<ChangeTimeCard> {
                   const SizedBox(
                     height: 5,
                   ),
-                  const Text(
+                  Text(
                     'Minutes',
                     style: TextStyle(
-                      color: kTextClr,
+                      color:
+                          Provider.of<SettingsProvider>(context).theme == 'dark'
+                              ? kTextClrDark
+                              : kTextClr,
                       fontWeight: FontWeight.bold,
                     ),
                   )

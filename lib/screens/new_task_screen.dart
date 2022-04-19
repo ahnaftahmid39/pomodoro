@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pomodoro/components/change_time_card.dart';
 import 'package:pomodoro/components/number_input_field.dart';
 import 'package:pomodoro/components/string_input_field.dart';
+import 'package:pomodoro/constants/constant.dart';
 import 'package:pomodoro/screens/task_session_screen.dart';
+import 'package:pomodoro/viewmodels/settings_provider.dart';
 import 'package:pomodoro/viewmodels/task_settings.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +44,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            Container(color: const Color.fromRGBO(224, 95, 82, 0.6)),
+            Container(
+                color: Provider.of<SettingsProvider>(context).theme == 'dark'
+                    ? kBgClrNoOpDark
+                    : kBgClrNoOp),
             ChangeNotifierProvider(
               create: (_) => TaskSettings(),
               builder: (context, _) => ListView(
